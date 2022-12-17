@@ -1,5 +1,5 @@
 ### Name of the project:
-Simulator Yandex.Deliver (Полина Роману: наверное, стоит по-другому назвать)
+Yandex Delivery Simulator
 
 ###  Team Lead:
 Project Developers: Polina Backhman, Yashin Roman  
