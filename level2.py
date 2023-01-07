@@ -29,28 +29,28 @@ def message(size, mess, color, x_mess, y_mess):
     SCREEN.blit(text_t, (x_mess, y_mess))
 
 class Other_Cars(pygame.sprite.Sprite):
-    im_random = random.choice(['materials/images/blue_car.png', 'materials/images/green_car.png',
-                               'materials/images/red_car.jpg'])
-    image = pygame.transform.scale(load_image('materials/images/car2.png'), (150, 120))
+    im_random = random.choice(['materials/images/cool_car.png',
+                               'materials/images/taxi.png'])
+    image = pygame.transform.scale(load_image(im_random), (100, 150))
 
     def __init__(self):
         super().__init__(all_sprites)
         self.add(other_car_sprite)
         self.other_car = Other_Cars.image
-        self.rect = self.other_car.get_rect().move(random.randrange(200, 467, 133), 0)
-        self.color_car = random.choice([(204, 6, 5), (49, 127, 67), (0, 0, 128), (232, 194, 44)])
-        self.other_car.fill(self.color_car, special_flags=pygame.BLEND_ADD)
+        self.rect = self.other_car.get_rect().move(random.randrange(210, 489, 139), 0)
+        # self.color_car = random.choice([(204, 6, 5), (49, 127, 67), (0, 0, 128), (232, 194, 44)])
+        # self.other_car.fill(self.color_car, special_flags=pygame.BLEND_ADD)
         self.mask = pygame.mask.from_surface(self.other_car)
 
     def driving_other_car(self, other):
         if self.rect.y < 620:
             self.rect = self.rect.move(0, 7)
         else:
-            cy = random.randrange(-500, -120)
-            cx = random.randrange(200, 467, 133)
+            cy = random.randrange(-500, -150)
+            cx = random.randrange(210, 489, 139)
             while cy == other.rect.y or cx == other.rect.x:
-                cy = random.randrange(-500, -120)
-                cx = random.randrange(200, 467, 133)
+                cy = random.randrange(-500, -150)
+                cx = random.randrange(210, 489, 139)
             self.rect.y = cy
             self.rect.x = cx
 
@@ -61,11 +61,11 @@ class Other_Cars(pygame.sprite.Sprite):
         if other.rect.y < 620:
             other.rect = other.rect.move(0, 7)
         else:
-            cy = random.randrange(-500, -120)
-            cx = random.randrange(200, 467, 133)
+            cy = random.randrange(-500, -150)
+            cx = random.randrange(210, 489, 139)
             while cy == self.rect.y or cx == self.rect.x:
-                cy = random.randrange(-500, -120)
-                cx = random.randrange(200, 467, 133)
+                cy = random.randrange(-500, -150)
+                cx = random.randrange(210, 489, 139)
             other.rect.y = cy
             other.rect.x = cx
 
@@ -78,7 +78,7 @@ class Other_Cars(pygame.sprite.Sprite):
 
 
 class Yandex_Robo_Delivery(pygame.sprite.Sprite):
-    image = pygame.transform.scale(load_image('materials/models/robo-deliver.png'), (150, 150))
+    image = pygame.transform.scale(load_image('materials/models/robo-deliver.png'), (120, 150))
 
     def __init__(self, x, y):
         super().__init__(all_sprites)
@@ -87,23 +87,26 @@ class Yandex_Robo_Delivery(pygame.sprite.Sprite):
         self.mask = pygame.mask.from_surface(self.robo_delivery)
 
     def update(self):
+        global reaction
         if pygame.sprite.collide_mask(self, other_car):
             message(50, "CRASHED", (0, 0, 0), WIDTH // 2 - 100, HEIGHT // 2 - 25)
             self.rect.y += 7
             time.sleep(1)
+            reaction = False
         if pygame.sprite.collide_mask(self, other_car2):
             message(50, "CRASHED", (0, 0, 0), WIDTH // 2 - 100, HEIGHT // 2 - 25)
             self.rect.y += 7
+            reaction = False
             time.sleep(1)
-        elif self.rect.x > 450 or self.rect.x < 200:
+        elif self.rect.x > 490 or self.rect.x < 185:
             message(50, "CRASHED", (0, 0, 0), WIDTH // 2 - 100, HEIGHT // 2 - 25)
+            reaction = False
+            time.sleep(1)
 
 
-
-y_en = 0
-lead_y = 0
-x_chages = 0
-x = 300
+reaction = True
+x_chages, y_chages = 0, 0
+x = 340
 y = 445
 block = 10
 clock = pygame.time.Clock()
@@ -121,14 +124,27 @@ while running:
         if event.type == pygame.QUIT:
             running = False
         if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_LEFT:
+            if event.key == pygame.K_LEFT and reaction:
                 x_chages -= block
-            elif event.key == pygame.K_RIGHT:
+            elif event.key == pygame.K_RIGHT and reaction:
                 x_chages += block
+            elif event.key == pygame.K_UP and reaction:
+                if y_chages - block + robot_delivery.rect.y > 0:
+                    y_chages -= block
+                else:
+                    y_chages = 0
+            elif event.key == pygame.K_DOWN and reaction:
+                if y_chages + block + robot_delivery.rect.y + 150 < HEIGHT:
+                    y_chages += block
+                else:
+                    y_chages = 0
         if event.type == pygame.KEYUP:
-            if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
+            if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT \
+                    or event.key == pygame.K_DOWN or event.key == pygame.K_UP:
                 x_chages = 0
+                y_chages = 0
     robot_delivery.rect.x += x_chages
+    robot_delivery.rect.y += y_chages
     # print(robot_delivery.rect.x)
     # x += robot_delivery.rect.x
     # print(x)
