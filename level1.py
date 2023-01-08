@@ -245,6 +245,11 @@ while running:
             running = False
         for obg in all_objects:
             if event.type == pygame.MOUSEBUTTONDOWN:
+                if stop.rect.x < event.pos[0] < stop.width + stop.rect.x and \
+                        stop.rect.y < event.pos[1] < stop.height + stop.rect.y:
+                    mess = []
+                    robot_delivery.mess = []
+                    robot_delivery.trash = []
                 if tell_man.rect.x < event.pos[0] < tell_man.width + tell_man.rect.x and \
                         tell_man.rect.y < event.pos[1] < tell_man.height + tell_man.rect.y:
                     all_sprites.remove(tell_man)
