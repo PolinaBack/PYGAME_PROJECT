@@ -1,4 +1,6 @@
 import random
+from collections import Counter
+
 import pygame
 import os
 import sys
@@ -6,12 +8,20 @@ import sys
 pygame.init()
 SIZE = WIDTH, HEIGHT = 800, 600
 SCREEN = pygame.display.set_mode(SIZE)
-
 mess = []
 font = pygame.font.Font(None, 30)
 x_mess = 10
-sound_1 = pygame.mixer.Sound(random.choice(["materials/audios/order1.wav", "materials/audios/order2.wav"]))
+choice1 = random.choice(["materials/audios/order1.wav", "materials/audios/order2.wav"])
+if choice1 == "materials/audios/order2.wav":
+    correct_check = ['Цезарь Ролл-----1', 'Куриные наггетсы-----1', 'Кофе----2', 'Пирожок с вишней----3', 'Пирожок с яблоком----3']
+else:
+    correct_check = ['Картофель Фри----3', 'Куриные наггетсы-----1', 'Биг Мак----2', 'Кока-Кола----3']
 
+sound_1 = pygame.mixer.Sound(choice1)
+
+bg = pygame.image.load("materials/images/bg1.png")
+SCREEN.blit(bg, (0, 0))
+pygame.display.flip()
 
 def load_image(name, colorkey=None):
     fullname = os.path.join(name)
@@ -180,6 +190,7 @@ class Yandex_Robo_Delivery2(pygame.sprite.Sprite):
 
 class Error_end(pygame.sprite.Sprite):
     image = load_image('materials/images/end_level1.png')
+    image = pygame.transform.scale(image, (150, 80))
 
     def __init__(self, x, y):
         super().__init__(all_sprites)
@@ -188,6 +199,18 @@ class Error_end(pygame.sprite.Sprite):
         self.mask = pygame.mask.from_surface(self.stop_end)
         self.width = self.stop_end.get_width()
         self.height = self.stop_end.get_height()
+
+class Check_order(pygame.sprite.Sprite):
+    image = load_image('materials/images/check_level1.png')
+    image = pygame.transform.scale(image, (150, 80))
+
+    def __init__(self, x, y):
+        super().__init__(all_sprites)
+        self.check_end = Check_order.image
+        self.rect = self.check_end.get_rect().move(x, y)
+        self.mask = pygame.mask.from_surface(self.check_end)
+        self.width = self.check_end.get_width()
+        self.height = self.check_end.get_height()
 
     # def update(self, other_obg):
     #     other_obg.rect.x, other_obg.rect.y = other_obg.x, other_obg.y
@@ -212,10 +235,11 @@ all_sprites = pygame.sprite.Group()
 all_objects = {}
 n = 0
 count = 0
-robot_delivery = Yandex_Robo_Delivery2(275, 345)
+robot_delivery = Yandex_Robo_Delivery2(250, 345)
 stop = Error_end(10, 500)
-tell_man_tell = Tell_Men_tell(540, 320)
-tell_man = Tell_Men(540, 320)
+check = Check_order(630, 500)
+tell_man_tell = Tell_Men_tell(490, 320)
+tell_man = Tell_Men(490, 320)
 coffee_d = Coffee_c(160, 0)
 all_objects[coffee_d] = 'Кофе-----'
 fries_p = Fries_Potato(10, 0)
@@ -232,8 +256,13 @@ coca_cola = Coca_cola_c(470, 0)
 all_objects[coca_cola] = 'Кока-Кола-----'
 nuggets = Nuggets_n(480, 170)
 all_objects[nuggets] = 'Куриные наггетсы-----'
+
+def compare(x, y):
+    return Counter(x) == Counter(y)
+
 while running:
-    SCREEN.fill((0, 0, 0))
+
+    SCREEN.blit(load_image("materials/images/bg1.png"), (0, -200))
     all_sprites.draw(SCREEN)
     y_mess = 340
     for m in mess:
@@ -250,6 +279,15 @@ while running:
                     mess = []
                     robot_delivery.mess = []
                     robot_delivery.trash = []
+
+                # Провека на переход к следущему уровню
+                if check.rect.x < event.pos[0] < check.width + check.rect.x and \
+                        check.rect.y < event.pos[1] < check.height + check.rect.y:
+                    if compare(correct_check, mess): # сделать переход на некст уровень
+                        print("sdf")
+                    else:
+                        print("sdfsdf")
+
                 if tell_man.rect.x < event.pos[0] < tell_man.width + tell_man.rect.x and \
                         tell_man.rect.y < event.pos[1] < tell_man.height + tell_man.rect.y:
                     all_sprites.remove(tell_man)
@@ -268,7 +306,5 @@ while running:
                     robot_delivery.update(n)
                     mess = robot_delivery.mess
                 rect_go = False
-        # all_sprites.draw(SCREEN)
-        # pygame.draw.rect(SCREEN, (0, 255, 0), (x_pos, y_pos, 100, 100))
     pygame.display.flip()
 pygame.quit()

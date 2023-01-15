@@ -38,8 +38,6 @@ class Other_Cars(pygame.sprite.Sprite):
         self.add(other_car_sprite)
         self.other_car = Other_Cars.image
         self.rect = self.other_car.get_rect().move(random.randrange(210, 489, 139), 0)
-        # self.color_car = random.choice([(204, 6, 5), (49, 127, 67), (0, 0, 128), (232, 194, 44)])
-        # self.other_car.fill(self.color_car, special_flags=pygame.BLEND_ADD)
         self.mask = pygame.mask.from_surface(self.other_car)
 
     def driving_other_car(self, other):
@@ -54,10 +52,6 @@ class Other_Cars(pygame.sprite.Sprite):
             self.rect.y = cy
             self.rect.x = cx
 
-            # self.other_car = Other_Cars.image
-            #
-            # self.color_car = random.choice([(204, 6, 5), (49, 127, 67), (0, 0, 128), (232, 194, 44)])
-            # self.other_car.fill(self.color_car, special_flags=pygame.BLEND_ADD)
         if other.rect.y < 620:
             other.rect = other.rect.move(0, 7)
         else:
@@ -68,13 +62,6 @@ class Other_Cars(pygame.sprite.Sprite):
                 cx = random.randrange(210, 489, 139)
             other.rect.y = cy
             other.rect.x = cx
-
-            # other.other_car = Other_Cars.image
-
-            # other.color_car = random.choice([(204, 6, 5), (49, 127, 67), (0, 0, 128), (232, 194, 44)])
-            # other.other_car.fill(other.color_car, special_flags=pygame.BLEND_ADD)
-            # self.color_car = random.choice([(204, 6, 5), (49, 127, 67), (0, 0, 128), (232, 194, 44)])
-
 
 
 class Yandex_Robo_Delivery(pygame.sprite.Sprite):
@@ -116,11 +103,9 @@ other_car_sprite = pygame.sprite.Group()
 robot_delivery = Yandex_Robo_Delivery(x, y)
 other_car = Other_Cars()
 other_car2 = Other_Cars()
-# место для новых спрайтов
 running = True
 while running:
     for event in pygame.event.get():
-        # при закрытии окна
         if event.type == pygame.QUIT:
             running = False
         if event.type == pygame.KEYDOWN:
@@ -145,25 +130,15 @@ while running:
                 y_chages = 0
     robot_delivery.rect.x += x_chages
     robot_delivery.rect.y += y_chages
-    # print(robot_delivery.rect.x)
-    # x += robot_delivery.rect.x
-    # print(x)
     SCREEN.fill((125, 116, 109))
 
-    # back()
-    # car(x, y)
-    # if y_en > 600:
-    #     y_en = 0
-    # other_car(y_en)
-    # crash(x)
     SCREEN.blit(load_image('materials/images/good_background.png'), (0, 0))
     SCREEN.blit(load_image('materials/images/good_background.png'), (600, 0))
 
     all_sprites.draw(SCREEN)
-    # other_car2.driving_other_car()
     other_car.driving_other_car(other_car2)
     all_sprites.update()
-    clock.tick(30)# 30 кадров в секунду
+    clock.tick(30)
     pygame.display.update()
     pygame.display.flip()
 pygame.quit()

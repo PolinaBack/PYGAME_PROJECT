@@ -1,5 +1,3 @@
-import time
-import random
 import pygame
 import os
 import sys
@@ -8,9 +6,7 @@ pygame.init()
 SIZE = WIDTH, HEIGHT = 800, 600
 SCREEN = pygame.display.set_mode(SIZE)
 
-# pygame.key.set_repeat(200, 70)
 FPS = 50
-# STEP = 5
 clock = pygame.time.Clock()
 player = None
 all_sprites = pygame.sprite.Group()
