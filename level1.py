@@ -6,6 +6,7 @@ import os
 import sys
 
 pygame.init()
+clock = pygame.time.Clock()
 SIZE = WIDTH, HEIGHT = 800, 600
 SCREEN = pygame.display.set_mode(SIZE)
 mess = []
@@ -200,6 +201,55 @@ class Error_end(pygame.sprite.Sprite):
         self.width = self.stop_end.get_width()
         self.height = self.stop_end.get_height()
 
+class Comp_Menu(pygame.sprite.Sprite):
+    image = load_image('materials/images/completed.png')
+    image = pygame.transform.scale(image, (600, 500))
+
+    def __init__(self, x, y):
+        super().__init__(menu)
+        self.cm = Comp_Menu.image
+        self.rect = self.cm.get_rect().move(x, y)
+        self.mask = pygame.mask.from_surface(self.cm)
+        self.width = self.cm.get_width()
+        self.height = self.cm.get_height()
+
+class Comp_Next(pygame.sprite.Sprite):
+    image = load_image('materials/images/comp_next.png')
+    image = pygame.transform.scale(image, (150, 150))
+
+    def __init__(self, x, y):
+        super().__init__(menu)
+        self.cn = Comp_Next.image
+        self.rect = self.cn.get_rect().move(x, y)
+        self.mask = pygame.mask.from_surface(self.cn)
+        self.width = self.cn.get_width()
+        self.height = self.cn.get_height()
+
+class Comp_Back(pygame.sprite.Sprite):
+    image = load_image('materials/images/comp_back.png')
+    image = pygame.transform.scale(image, (150, 150))
+
+    def __init__(self, x, y):
+        super().__init__(menu)
+        self.cb = Comp_Back.image
+        self.rect = self.cb.get_rect().move(x, y)
+        self.mask = pygame.mask.from_surface(self.cb)
+        self.width = self.cb.get_width()
+        self.height = self.cb.get_height()
+
+class Comp_Main(pygame.sprite.Sprite):
+    image = load_image('materials/images/comp_menu.png')
+    image = pygame.transform.scale(image, (245, 125))
+
+    def __init__(self, x, y):
+        super().__init__(menu)
+        self.cm = Comp_Main.image
+        self.rect = self.cm.get_rect().move(x, y)
+        self.mask = pygame.mask.from_surface(self.cm)
+        self.width = self.cm.get_width()
+        self.height = self.cm.get_height()
+
+
 class Check_order(pygame.sprite.Sprite):
     image = load_image('materials/images/check_level1.png')
     image = pygame.transform.scale(image, (150, 80))
@@ -232,6 +282,7 @@ x_pos, y_pos = 0, 0
 
 pygame.display.set_caption('Заголовок окна')
 all_sprites = pygame.sprite.Group()
+menu = pygame.sprite.Group()
 all_objects = {}
 n = 0
 count = 0
@@ -260,13 +311,14 @@ all_objects[nuggets] = 'Куриные наггетсы-----'
 def compare(x, y):
     return Counter(x) == Counter(y)
 
+
 while running:
 
     SCREEN.blit(load_image("materials/images/bg1.png"), (0, -200))
     all_sprites.draw(SCREEN)
     y_mess = 340
     for m in mess:
-        text_t = font.render(m, True, (0, 255, 0))
+        text_t = font.render(m, True, (0, 0, 0))
         SCREEN.blit(text_t, (x_mess, y_mess))
         y_mess += 20
     for event in pygame.event.get():
@@ -284,7 +336,32 @@ while running:
                 if check.rect.x < event.pos[0] < check.width + check.rect.x and \
                         check.rect.y < event.pos[1] < check.height + check.rect.y:
                     if compare(correct_check, mess): # сделать переход на некст уровень
-                        print("sdf")
+                        menu_table = Comp_Menu(100, 50)
+                        menu_next = Comp_Next(520, 385)
+                        menu_back = Comp_Back(130, 375)
+                        menu_main = Comp_Main(282, 385)
+
+                        SCREEN.blit(load_image("materials/images/bg1.png"), (0, -200))
+                        menu.draw(SCREEN)
+                        clock.tick(30)  # 30 кадров в секунду
+                        pygame.display.flip()
+
+                        running1 = True
+                        while running1:
+                            for event1 in pygame.event.get():
+                                if event1.type == pygame.QUIT:
+                                    running1 = False
+                                if event1.type == pygame.MOUSEBUTTONDOWN:
+                                    if menu_next.rect.x < event1.pos[0] < menu_next.width + menu_next.rect.x and \
+                                            menu_next.rect.y < event1.pos[1] < menu_next.height + menu_next.rect.y:
+                                        exec(open("level2.py").read())
+                                        running1 = False
+                                    if menu_main.rect.x < event1.pos[0] < menu_main.width + menu_main.rect.x and \
+                                            menu_main.rect.y < event1.pos[1] < menu_main.height + menu_main.rect.y:
+                                        exec(open("test.py", encoding='utf8').read())
+                                        running1 = False
+                        running = False
+
                     else:
                         print("sdfsdf")
 

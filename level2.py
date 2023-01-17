@@ -76,20 +76,139 @@ class Yandex_Robo_Delivery(pygame.sprite.Sprite):
     def update(self):
         global reaction
         if pygame.sprite.collide_mask(self, other_car):
-            message(50, "CRASHED", (0, 0, 0), WIDTH // 2 - 100, HEIGHT // 2 - 25)
+            menu_table = Comp_Menu(100, 50)
+            menu_next = Comp_Next(520, 385)
+            menu_back = Comp_Back(130, 375)
+            menu_main = Comp_Main(282, 385)
+
+            SCREEN.blit(load_image("materials/images/bg1.png"), (0, -200))
+            menu.draw(SCREEN)
+            clock.tick(30)  # 30 кадров в секунду
+            pygame.display.flip()
+
+            running1 = True
+            while running1:
+                for event1 in pygame.event.get():
+                    if event1.type == pygame.QUIT:
+                        running1 = False
+                    if event1.type == pygame.MOUSEBUTTONDOWN:
+                        if menu_next.rect.x < event1.pos[0] < menu_next.width + menu_next.rect.x and \
+                                menu_next.rect.y < event1.pos[1] < menu_next.height + menu_next.rect.y:
+                            exec(open("level3.py", encoding='utf8').read())
+                            running1 = False
+                        if menu_main.rect.x < event1.pos[0] < menu_main.width + menu_main.rect.x and \
+                                menu_main.rect.y < event1.pos[1] < menu_main.height + menu_main.rect.y:
+                            exec(open("test.py", encoding='utf8').read())
+                            running1 = False
             self.rect.y += 7
             time.sleep(1)
             reaction = False
+
         if pygame.sprite.collide_mask(self, other_car2):
-            message(50, "CRASHED", (0, 0, 0), WIDTH // 2 - 100, HEIGHT // 2 - 25)
+            menu_table = Comp_Menu(100, 50)
+            menu_next = Comp_Next(520, 385)
+            menu_back = Comp_Back(130, 375)
+            menu_main = Comp_Main(282, 385)
+
+            SCREEN.blit(load_image("materials/images/bg1.png"), (0, -200))
+            menu.draw(SCREEN)
+            clock.tick(30)  # 30 кадров в секунду
+            pygame.display.flip()
+
+            running1 = True
+            while running1:
+                for event1 in pygame.event.get():
+                    if event1.type == pygame.QUIT:
+                        running1 = False
+                    if event1.type == pygame.MOUSEBUTTONDOWN:
+                        if menu_next.rect.x < event1.pos[0] < menu_next.width + menu_next.rect.x and \
+                                menu_next.rect.y < event1.pos[1] < menu_next.height + menu_next.rect.y:
+                            exec(open("level3.py", encoding='utf8').read())
+                            running1 = False
+                        if menu_main.rect.x < event1.pos[0] < menu_main.width + menu_main.rect.x and \
+                                menu_main.rect.y < event1.pos[1] < menu_main.height + menu_main.rect.y:
+                            exec(open("test.py", encoding='utf8').read())
+                            running1 = False
             self.rect.y += 7
-            reaction = False
-            time.sleep(1)
-        elif self.rect.x > 490 or self.rect.x < 185:
-            message(50, "CRASHED", (0, 0, 0), WIDTH // 2 - 100, HEIGHT // 2 - 25)
             reaction = False
             time.sleep(1)
 
+        elif self.rect.x > 490 or self.rect.x < 185:
+            menu_table = Comp_Menu(100, 50)
+            menu_next = Comp_Next(520, 385)
+            menu_back = Comp_Back(130, 375)
+            menu_main = Comp_Main(282, 385)
+
+            SCREEN.blit(load_image("materials/images/bg1.png"), (0, -200))
+            menu.draw(SCREEN)
+            clock.tick(30)  # 30 кадров в секунду
+            pygame.display.flip()
+
+            running1 = True
+            while running1:
+                for event1 in pygame.event.get():
+                    if event1.type == pygame.QUIT:
+                        running1 = False
+                    if event1.type == pygame.MOUSEBUTTONDOWN:
+                        if menu_next.rect.x < event1.pos[0] < menu_next.width + menu_next.rect.x and \
+                                menu_next.rect.y < event1.pos[1] < menu_next.height + menu_next.rect.y:
+                            exec(open("level3.py", encoding="utf8").read())
+                            running1 = False
+                        if menu_main.rect.x < event1.pos[0] < menu_main.width + menu_main.rect.x and \
+                                menu_main.rect.y < event1.pos[1] < menu_main.height + menu_main.rect.y:
+                            exec(open("test.py", encoding='utf8').read())
+                            running1 = False
+            reaction = False
+            time.sleep(1)
+
+
+class Comp_Menu(pygame.sprite.Sprite):
+    image = load_image('materials/images/completed.png')
+    image = pygame.transform.scale(image, (600, 500))
+
+    def __init__(self, x, y):
+        super().__init__(menu)
+        self.cm = Comp_Menu.image
+        self.rect = self.cm.get_rect().move(x, y)
+        self.mask = pygame.mask.from_surface(self.cm)
+        self.width = self.cm.get_width()
+        self.height = self.cm.get_height()
+
+class Comp_Next(pygame.sprite.Sprite):
+    image = load_image('materials/images/comp_next.png')
+    image = pygame.transform.scale(image, (150, 150))
+
+    def __init__(self, x, y):
+        super().__init__(menu)
+        self.cn = Comp_Next.image
+        self.rect = self.cn.get_rect().move(x, y)
+        self.mask = pygame.mask.from_surface(self.cn)
+        self.width = self.cn.get_width()
+        self.height = self.cn.get_height()
+
+class Comp_Back(pygame.sprite.Sprite):
+    image = load_image('materials/images/comp_back.png')
+    image = pygame.transform.scale(image, (150, 150))
+
+    def __init__(self, x, y):
+        super().__init__(menu)
+        self.cb = Comp_Back.image
+        self.rect = self.cb.get_rect().move(x, y)
+        self.mask = pygame.mask.from_surface(self.cb)
+        self.width = self.cb.get_width()
+        self.height = self.cb.get_height()
+
+class Comp_Main(pygame.sprite.Sprite):
+    image = load_image('materials/images/comp_menu.png')
+    image = pygame.transform.scale(image, (245, 125))
+
+    def __init__(self, x, y):
+        super().__init__(menu)
+        self.cm = Comp_Main.image
+        self.rect = self.cm.get_rect().move(x, y)
+        self.mask = pygame.mask.from_surface(self.cm)
+        self.width = self.cm.get_width()
+        self.height = self.cm.get_height()
 
 reaction = True
 x_chages, y_chages = 0, 0
@@ -99,11 +218,13 @@ block = 10
 clock = pygame.time.Clock()
 pygame.display.set_caption('Заголовок окна')
 all_sprites = pygame.sprite.Group()
+menu = pygame.sprite.Group()
 other_car_sprite = pygame.sprite.Group()
 robot_delivery = Yandex_Robo_Delivery(x, y)
 other_car = Other_Cars()
 other_car2 = Other_Cars()
 running = True
+
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -128,6 +249,7 @@ while running:
                     or event.key == pygame.K_DOWN or event.key == pygame.K_UP:
                 x_chages = 0
                 y_chages = 0
+
     robot_delivery.rect.x += x_chages
     robot_delivery.rect.y += y_chages
     SCREEN.fill((125, 116, 109))

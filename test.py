@@ -135,6 +135,10 @@ lvl_sprites = pygame.sprite.Group()
 class Menu:
     def __init__(self):
         self.main_menu()
+
+    def zast(self):
+        pass
+
     def main_menu(self):
         self.start_btn = Start_Button(220, 30)
         self.choose_btn = Choose_Button(220, 150)
