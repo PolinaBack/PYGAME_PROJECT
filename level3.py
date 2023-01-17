@@ -1,3 +1,5 @@
+import time
+
 import pygame
 import os
 import sys
@@ -40,7 +42,8 @@ def load_level(filename):
 tile_images = {
     'wall': pygame.transform.scale(load_image('materials/images/box.png'), (80, 80)),
     'empty': pygame.transform.scale(load_image('materials/images/tales2.jpg'), (80, 80)),
-    'bush': pygame.transform.scale(load_image('materials/images/bush.png'), (80, 80))
+    'bush': pygame.transform.scale(load_image('materials/images/bush.png'), (80, 80)),
+    'lake': pygame.transform.scale(load_image('materials/images/lake_picture.png'), (80, 80))
 }
 player_image = pygame.transform.scale(load_image('materials/models/robo-deliver.png'), (70, 70))
 tile_width = tile_height = 80
@@ -63,10 +66,23 @@ class Player(pygame.sprite.Sprite):
         self.rect = self.image.get_rect().move(pos_x * tile_width + 2, pos_y * tile_height + 2)
 
     def wall_crash(self, col_obj):
-        if pygame.sprite.collide_rect(self, col_obj) and col_obj == tile_images['wall']:
-            print('crashed wall')
-        if pygame.sprite.collide_rect(self, col_obj) and col_obj == tile_images['bush']:
-            print('crashed bush')
+        if pygame.sprite.collide_rect(self, col_obj) and col_obj.image == tile_images['wall']\
+                and (button == 'right' or button == 'left'):
+            player.rect.x -= x_chages
+        elif pygame.sprite.collide_rect(self, col_obj) and col_obj.image == tile_images['wall']\
+                and (button == 'up' or button == 'down'):
+            player.rect.y -= y_chages
+        # if pygame.sprite.collide_rect(self, col_obj) and col_obj.image == tile_images['bush'] \
+        #         and (button == 'right' or button == 'left'):
+        #     player.image.set_alpha(150)
+        if pygame.sprite.collide_rect(self, col_obj) and col_obj.image == tile_images['bush']:
+            player.image.set_alpha(150)
+        if pygame.sprite.collide_rect(self, col_obj) and col_obj.image == tile_images['lake'] \
+                and (button == 'right' or button == 'left'):
+            player.rect.x -= x_chages
+        elif pygame.sprite.collide_rect(self, col_obj) and col_obj.image == tile_images['lake'] \
+                and (button == 'up' or button == 'down'):
+            player.rect.y -= y_chages
 
 
 def generate_level(level):
@@ -83,6 +99,8 @@ def generate_level(level):
                 Tile('wall', x, y)
             elif level[y][x] == '*':
                 Tile('bush', x, y)
+            elif level[y][x] == '~':
+                Tile('lake', x, y)
     return new_player, x, y
 
 player, level_x, level_y = generate_level(load_level("materials/data/level3.txt"))
@@ -100,12 +118,12 @@ class Camera:
         self.dy = -(target.rect.y + target.rect.h // 2 - HEIGHT // 2)
 
 
-
 camera = Camera()
 running = True
 x_chages, y_chages = 0, 0
 reaction = True
 block = 5
+button = ''
 # Главный Игровой цикл
 while running:
     for event in pygame.event.get():
@@ -115,19 +133,23 @@ while running:
             if event.key == pygame.K_LEFT and reaction:
                 x_chages -= block
                 button = 'left'
+                player.image = pygame.transform.rotate(player_image, 90)
             elif event.key == pygame.K_RIGHT and reaction:
                 x_chages += block
                 button = 'right'
+                player.image = pygame.transform.rotate(player_image, 270)
             elif event.key == pygame.K_UP and reaction:
                 # if y_chages - block + player.rect.y > 0:
                 y_chages -= block
                 button = 'up'
+                player.image = pygame.transform.rotate(player_image, 0)
                 # else:
                 #     y_chages = 0
             elif event.key == pygame.K_DOWN and reaction:
                 # if y_chages + block + player.rect.y + 150 < HEIGHT:
                 y_chages += block
                 button = 'down'
+                player.image = pygame.transform.rotate(player_image, 180)
                 # else:
                 #     y_chages = 0
         if event.type == pygame.KEYUP:

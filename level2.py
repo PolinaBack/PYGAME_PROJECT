@@ -39,10 +39,15 @@ class Other_Cars(pygame.sprite.Sprite):
         self.other_car = Other_Cars.image
         self.rect = self.other_car.get_rect().move(random.randrange(210, 489, 139), 0)
         self.mask = pygame.mask.from_surface(self.other_car)
+        self.score = 4
+        self.count = 0
 
     def driving_other_car(self, other):
         if self.rect.y < 620:
-            self.rect = self.rect.move(0, 7)
+            self.rect = self.rect.move(0, self.score)
+            self.count += 1
+            if self.count % 50 == 0:
+                self.score += 0.5
         else:
             cy = random.randrange(-500, -150)
             cx = random.randrange(210, 489, 139)
@@ -53,7 +58,7 @@ class Other_Cars(pygame.sprite.Sprite):
             self.rect.x = cx
 
         if other.rect.y < 620:
-            other.rect = other.rect.move(0, 7)
+            other.rect = other.rect.move(0, self.score)
         else:
             cy = random.randrange(-500, -150)
             cx = random.randrange(210, 489, 139)
@@ -280,6 +285,9 @@ while running:
     all_sprites.update()
     clock.tick(30)
     pygame.display.update()
+    font = pygame.font.Font(None, 30)
+    text_t = font.render(f'score: {other_car.score}', True, (255, 0, 0))
+    SCREEN.blit(text_t, (350, 10))
     pygame.display.flip()
 pygame.quit()
 
