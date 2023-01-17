@@ -4,10 +4,10 @@ import pygame
 import os
 import sys
 
+
 pygame.init()
 SIZE = WIDTH, HEIGHT = 800, 600
 SCREEN = pygame.display.set_mode(SIZE)
-
 def load_image(name, colorkey=None):
     fullname = os.path.join(name)
     if not os.path.isfile(fullname):
@@ -94,11 +94,17 @@ class Yandex_Robo_Delivery(pygame.sprite.Sprite):
                     if event1.type == pygame.MOUSEBUTTONDOWN:
                         if menu_next.rect.x < event1.pos[0] < menu_next.width + menu_next.rect.x and \
                                 menu_next.rect.y < event1.pos[1] < menu_next.height + menu_next.rect.y:
-                            exec(open("level3.py", encoding='utf8').read())
+                            import level3
                             running1 = False
                         if menu_main.rect.x < event1.pos[0] < menu_main.width + menu_main.rect.x and \
                                 menu_main.rect.y < event1.pos[1] < menu_main.height + menu_main.rect.y:
-                            exec(open("test.py", encoding='utf8').read())
+                            from test import Menu
+                            p = Menu()
+                            p.main_menu()
+                            running1 = False
+                        if menu_back.rect.x < event1.pos[0] < menu_back.width + menu_back.rect.x and \
+                                menu_back.rect.y < event1.pos[1] < menu_back.height + menu_back.rect.y:
+                            import level1
                             running1 = False
             self.rect.y += 7
             time.sleep(1)
@@ -123,11 +129,17 @@ class Yandex_Robo_Delivery(pygame.sprite.Sprite):
                     if event1.type == pygame.MOUSEBUTTONDOWN:
                         if menu_next.rect.x < event1.pos[0] < menu_next.width + menu_next.rect.x and \
                                 menu_next.rect.y < event1.pos[1] < menu_next.height + menu_next.rect.y:
-                            exec(open("level3.py", encoding='utf8').read())
+                            import level3
                             running1 = False
                         if menu_main.rect.x < event1.pos[0] < menu_main.width + menu_main.rect.x and \
                                 menu_main.rect.y < event1.pos[1] < menu_main.height + menu_main.rect.y:
-                            exec(open("test.py", encoding='utf8').read())
+                            from test import Menu
+                            p = Menu()
+                            p.main_menu()
+                            running1 = False
+                        if menu_back.rect.x < event1.pos[0] < menu_back.width + menu_back.rect.x and \
+                                menu_back.rect.y < event1.pos[1] < menu_back.height + menu_back.rect.y:
+                            import level1
                             running1 = False
             self.rect.y += 7
             reaction = False
@@ -152,11 +164,17 @@ class Yandex_Robo_Delivery(pygame.sprite.Sprite):
                     if event1.type == pygame.MOUSEBUTTONDOWN:
                         if menu_next.rect.x < event1.pos[0] < menu_next.width + menu_next.rect.x and \
                                 menu_next.rect.y < event1.pos[1] < menu_next.height + menu_next.rect.y:
-                            exec(open("level3.py", encoding="utf8").read())
+                            import level3
                             running1 = False
                         if menu_main.rect.x < event1.pos[0] < menu_main.width + menu_main.rect.x and \
                                 menu_main.rect.y < event1.pos[1] < menu_main.height + menu_main.rect.y:
-                            exec(open("test.py", encoding='utf8').read())
+                            from test import Menu
+                            p = Menu()
+                            p.main_menu()
+                            running1 = False
+                        if menu_back.rect.x < event1.pos[0] < menu_back.width + menu_back.rect.x and \
+                                menu_back.rect.y < event1.pos[1] < menu_back.height + menu_back.rect.y:
+                            import level1
                             running1 = False
             reaction = False
             time.sleep(1)
@@ -216,7 +234,7 @@ x = 340
 y = 445
 block = 10
 clock = pygame.time.Clock()
-pygame.display.set_caption('Заголовок окна')
+pygame.display.set_caption("Level 2")
 all_sprites = pygame.sprite.Group()
 menu = pygame.sprite.Group()
 other_car_sprite = pygame.sprite.Group()

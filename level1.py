@@ -9,6 +9,7 @@ pygame.init()
 clock = pygame.time.Clock()
 SIZE = WIDTH, HEIGHT = 800, 600
 SCREEN = pygame.display.set_mode(SIZE)
+
 mess = []
 font = pygame.font.Font(None, 30)
 x_mess = 10
@@ -280,7 +281,7 @@ rect_go = False
 x_pos, y_pos = 0, 0
 
 
-pygame.display.set_caption('Заголовок окна')
+pygame.display.set_caption("Level 1")
 all_sprites = pygame.sprite.Group()
 menu = pygame.sprite.Group()
 all_objects = {}
@@ -313,7 +314,6 @@ def compare(x, y):
 
 
 while running:
-
     SCREEN.blit(load_image("materials/images/bg1.png"), (0, -200))
     all_sprites.draw(SCREEN)
     y_mess = 340
@@ -358,7 +358,9 @@ while running:
                                         running1 = False
                                     if menu_main.rect.x < event1.pos[0] < menu_main.width + menu_main.rect.x and \
                                             menu_main.rect.y < event1.pos[1] < menu_main.height + menu_main.rect.y:
-                                        exec(open("test.py", encoding='utf8').read())
+                                        from test import Menu
+                                        p = Menu()
+                                        p.main_menu()
                                         running1 = False
                         running = False
 
@@ -384,4 +386,5 @@ while running:
                     mess = robot_delivery.mess
                 rect_go = False
     pygame.display.flip()
+
 pygame.quit()

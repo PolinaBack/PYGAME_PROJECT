@@ -1,6 +1,7 @@
 import pygame
 import os
 import sys
+import random
 
 
 pygame.init()
@@ -128,7 +129,7 @@ class T_Lvl_Button(pygame.sprite.Sprite):
         self.height = self.tlb.get_height()
 
 clock = pygame.time.Clock()
-pygame.display.set_caption('ИГРА')
+pygame.display.set_caption('Yandex Simulator')
 back_sprite = pygame.sprite.Group()
 lvl_sprites = pygame.sprite.Group()
 
@@ -159,7 +160,8 @@ class Menu:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if self.start_btn.rect.x < event.pos[0] < self.start_btn.width + self.start_btn.rect.x and \
                             self.start_btn.rect.y < event.pos[1] < self.start_btn.height + self.start_btn.rect.y:
-                        print("ОК")
+                        import level1
+                        runnig = False
 
                     if self.choose_btn.rect.x < event.pos[0] < self.choose_btn.width + self.choose_btn.rect.x and \
                             self.choose_btn.rect.y < event.pos[1] < self.choose_btn.height + self.choose_btn.rect.y:
@@ -192,13 +194,16 @@ class Menu:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if f_lvl_btn.rect.x < event.pos[0] < f_lvl_btn.width + f_lvl_btn.rect.x and \
                             f_lvl_btn.rect.y < event.pos[1] < f_lvl_btn.height + f_lvl_btn.rect.y:
-                        self.main_menu()
+                        import level1
+                        running = False
                     if s_lvl_btn.rect.x < event.pos[0] < s_lvl_btn.width + s_lvl_btn.rect.x and \
                             s_lvl_btn.rect.y < event.pos[1] < s_lvl_btn.height + s_lvl_btn.rect.y:
-                        self.main_menu()
+                        import level2
+                        running = False
                     if t_lvl_btn.rect.x < event.pos[0] < t_lvl_btn.width + t_lvl_btn.rect.x and \
                             t_lvl_btn.rect.y < event.pos[1] < t_lvl_btn.height + t_lvl_btn.rect.y:
-                        self.main_menu()
+                        import level3
+                        running = False
 
 
     def rules(self):
@@ -222,6 +227,7 @@ class Menu:
 
 # место для новых спрайтов
     # отрисовка и изменение свойств объектов
-p = Menu()
-p.main_menu
-pygame.quit()
+if __name__ == "__main__":
+    p = Menu()
+    p.main_menu
+    pygame.quit()

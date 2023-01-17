@@ -5,6 +5,7 @@ import sys
 pygame.init()
 SIZE = WIDTH, HEIGHT = 800, 600
 SCREEN = pygame.display.set_mode(SIZE)
+pygame.display.set_caption("Level 3")
 
 FPS = 50
 clock = pygame.time.Clock()
