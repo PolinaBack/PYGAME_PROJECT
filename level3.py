@@ -1,5 +1,4 @@
 import time
-
 import pygame
 import os
 import sys
@@ -15,6 +14,8 @@ player = None
 all_sprites = pygame.sprite.Group()
 tiles_group = pygame.sprite.Group()
 player_group = pygame.sprite.Group()
+font = pygame.font.Font(None, 30)
+texting_show = False
 
 
 def load_image(name, color_key=None):
@@ -43,7 +44,8 @@ tile_images = {
     'wall': pygame.transform.scale(load_image('materials/images/box.png'), (80, 80)),
     'empty': pygame.transform.scale(load_image('materials/images/tales2.jpg'), (80, 80)),
     'bush': pygame.transform.scale(load_image('materials/images/bush.png'), (80, 80)),
-    'lake': pygame.transform.scale(load_image('materials/images/lake_picture.png'), (80, 80))
+    'lake': pygame.transform.scale(load_image('materials/images/lake_picture.png'), (80, 80)),
+    'finish': pygame.transform.scale(load_image('materials/images/finish.png'), (80, 80))
 }
 player_image = pygame.transform.scale(load_image('materials/models/robo-deliver.png'), (70, 70))
 tile_width = tile_height = 80
@@ -66,6 +68,7 @@ class Player(pygame.sprite.Sprite):
         self.rect = self.image.get_rect().move(pos_x * tile_width + 2, pos_y * tile_height + 2)
 
     def wall_crash(self, col_obj):
+        global texting_show, time_out
         if pygame.sprite.collide_rect(self, col_obj) and col_obj.image == tile_images['wall']\
                 and (button == 'right' or button == 'left'):
             player.rect.x -= x_chages
@@ -83,6 +86,11 @@ class Player(pygame.sprite.Sprite):
         elif pygame.sprite.collide_rect(self, col_obj) and col_obj.image == tile_images['lake'] \
                 and (button == 'up' or button == 'down'):
             player.rect.y -= y_chages
+        if pygame.sprite.collide_rect(self, col_obj) and col_obj.image == tile_images['finish']:
+            texting_show = True
+            time_out = time.time()
+            text_t = font.render(f'fINiSH', True, (0, 0, 0))
+            SCREEN.blit(text_t, (350, 10))
 
 
 def generate_level(level):
@@ -101,6 +109,8 @@ def generate_level(level):
                 Tile('bush', x, y)
             elif level[y][x] == '~':
                 Tile('lake', x, y)
+            elif level[y][x] == '$':
+                Tile('finish', x, y)
     return new_player, x, y
 
 player, level_x, level_y = generate_level(load_level("materials/data/level3.txt"))
@@ -122,6 +132,7 @@ camera = Camera()
 running = True
 x_chages, y_chages = 0, 0
 reaction = True
+time_go = False
 block = 5
 button = ''
 # Главный Игровой цикл
@@ -130,6 +141,9 @@ while running:
         if event.type == pygame.QUIT:
             running = False
         if event.type == pygame.KEYDOWN:
+            if not time_go:
+                now = time.time()
+            time_go = True
             if event.key == pygame.K_LEFT and reaction:
                 x_chages -= block
                 button = 'left'
@@ -166,6 +180,13 @@ while running:
     SCREEN.fill(pygame.Color(127, 199, 255))
     tiles_group.draw(SCREEN)
     player_group.draw(SCREEN)
+    if time_go:
+        text_t = font.render(f'{round((time.time() - now), 1)}', True, (255, 255, 255))
+        SCREEN.blit(text_t, (350, 10))
+    if texting_show:
+        text_t = font.render(f'FINISH with result: {round((time_out - now), 3)}', True, (0, 0, 0))
+        SCREEN.blit(text_t, (350, 10))
+        time_go = False
     pygame.display.flip()
     clock.tick(FPS)
 pygame.quit()

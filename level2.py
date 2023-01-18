@@ -8,6 +8,9 @@ import sys
 pygame.init()
 SIZE = WIDTH, HEIGHT = 800, 600
 SCREEN = pygame.display.set_mode(SIZE)
+text_showing = False
+
+
 def load_image(name, colorkey=None):
     fullname = os.path.join(name)
     if not os.path.isfile(fullname):
@@ -27,6 +30,7 @@ def message(size, mess, color, x_mess, y_mess):
     font = pygame.font.Font(None, size)
     text_t = font.render(mess, True, color)
     SCREEN.blit(text_t, (x_mess, y_mess))
+
 
 class Other_Cars(pygame.sprite.Sprite):
     im_random = random.choice(['materials/images/cool_car.png',
@@ -184,6 +188,22 @@ class Yandex_Robo_Delivery(pygame.sprite.Sprite):
             reaction = False
             time.sleep(1)
 
+class Finish(pygame.sprite.Sprite):
+    image = pygame.transform.scale(load_image('materials/images/finish2.png'), (400, 50))
+
+    def __init__(self, x, y):
+        super().__init__(all_sprites)
+        self.finish = Finish.image
+        self.rect = self.finish.get_rect().move(x, y)
+        self.mask = pygame.mask.from_surface(self.finish)
+
+    def moving(self, score, robot):
+        global text_showing
+        self.rect = self.rect.move(0, score)
+        print(self.rect)
+        if pygame.sprite.collide_mask(self, robot):
+            text_showing = True
+
 
 class Comp_Menu(pygame.sprite.Sprite):
     image = load_image('materials/images/completed.png')
@@ -243,6 +263,7 @@ pygame.display.set_caption("Level 2")
 all_sprites = pygame.sprite.Group()
 menu = pygame.sprite.Group()
 other_car_sprite = pygame.sprite.Group()
+finish = Finish(200, -100)
 robot_delivery = Yandex_Robo_Delivery(x, y)
 other_car = Other_Cars()
 other_car2 = Other_Cars()
@@ -257,16 +278,16 @@ while running:
                 x_chages -= block
             elif event.key == pygame.K_RIGHT and reaction:
                 x_chages += block
-            elif event.key == pygame.K_UP and reaction:
-                if y_chages - block + robot_delivery.rect.y > 0:
-                    y_chages -= block
-                else:
-                    y_chages = 0
-            elif event.key == pygame.K_DOWN and reaction:
-                if y_chages + block + robot_delivery.rect.y + 150 < HEIGHT:
-                    y_chages += block
-                else:
-                    y_chages = 0
+            # elif event.key == pygame.K_UP and reaction:
+            #     if y_chages - block + robot_delivery.rect.y > 0:
+            #         y_chages -= block
+            #     else:
+            #         y_chages = 0
+            # elif event.key == pygame.K_DOWN and reaction:
+            #     if y_chages + block + robot_delivery.rect.y + 150 < HEIGHT:
+            #         y_chages += block
+            #     else:
+            #         y_chages = 0
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT \
                     or event.key == pygame.K_DOWN or event.key == pygame.K_UP:
@@ -274,18 +295,24 @@ while running:
                 y_chages = 0
 
     robot_delivery.rect.x += x_chages
-    robot_delivery.rect.y += y_chages
+    # robot_delivery.rect.y += y_chages
     SCREEN.fill((125, 116, 109))
 
     SCREEN.blit(load_image('materials/images/good_background.png'), (0, 0))
     SCREEN.blit(load_image('materials/images/good_background.png'), (600, 0))
 
+    if other_car.score >= 5:
+        finish.moving(other_car.score, robot_delivery)
     all_sprites.draw(SCREEN)
     other_car.driving_other_car(other_car2)
+    font = pygame.font.Font(None, 30)
+    font2 = pygame.font.Font(None, 100)
+    if text_showing:
+        text_t = font2.render(f'FINISH', True, (0, 0, 0))
+        SCREEN.blit(text_t, (300, 250))
     all_sprites.update()
     clock.tick(30)
     pygame.display.update()
-    font = pygame.font.Font(None, 30)
     text_t = font.render(f'score: {other_car.score}', True, (255, 0, 0))
     SCREEN.blit(text_t, (350, 10))
     pygame.display.flip()
