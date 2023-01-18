@@ -65,7 +65,7 @@ class Rules_Button(pygame.sprite.Sprite):
 
 
 class Back_Button(pygame.sprite.Sprite):
-    image = pygame.transform.scale(load_image('materials/images/back_btn.png'), (350, 100))
+    image = pygame.transform.scale(load_image('materials/images/back_btn.png'), (310, 70))
 
     def __init__(self, x, y):
         super().__init__(back_sprite)
@@ -76,6 +76,17 @@ class Back_Button(pygame.sprite.Sprite):
         self.width = self.bb.get_width()
         self.height = self.bb.get_height()
 
+class Back_Button1(pygame.sprite.Sprite):
+    image = pygame.transform.scale(load_image('materials/images/back_btn.png'), (360, 100))
+
+    def __init__(self, x, y):
+        super().__init__(lvl_sprites)
+        self.x, self.y = x, y
+        self.bb = Quit_Button.image
+        self.rect = self.bb.get_rect().move(x, y)
+        self.mask = pygame.mask.from_surface(self.bb)
+        self.width = self.bb.get_width()
+        self.height = self.bb.get_height()
 
 class Quit_Button(pygame.sprite.Sprite):
     image = pygame.transform.scale(load_image('materials/images/quit_btn.png'), (350, 100))
@@ -180,7 +191,8 @@ class Menu:
     def choose_level(self):
         f_lvl_btn = F_Lvl_Button(180, 50)
         s_lvl_btn = S_Lvl_Button(430, 50)
-        t_lvl_btn = T_Lvl_Button(290, 300)
+        t_lvl_btn = T_Lvl_Button(180, 300)
+        back_btn = Back_Button1(430, 500)
         SCREEN.blit(load_image("materials/images/main_bg.png"), (-300, 0))
         lvl_sprites.draw(SCREEN)
         clock.tick(30)  # 30 кадров в секунду
@@ -204,11 +216,15 @@ class Menu:
                             t_lvl_btn.rect.y < event.pos[1] < t_lvl_btn.height + t_lvl_btn.rect.y:
                         import level3
                         running = False
+                    if back_btn.rect.x < event.pos[0] < back_btn.width + back_btn.rect.x and \
+                            back_btn.rect.y < event.pos[1] < back_btn.height + back_btn.rect.y:
+                        self.main_menu()
 
 
     def rules(self):
-        back_btn = Back_Button(430, 500)
+        back_btn = Back_Button(460, 530)
         SCREEN.blit(load_image("materials/images/main_bg.png"), (-300, 0))
+        SCREEN.blit(load_image("materials/images/rules.png"), (0, 0))
         back_sprite.draw(SCREEN)
         clock.tick(30)  # 30 кадров в секунду
         pygame.display.flip()
@@ -225,8 +241,6 @@ class Menu:
 
 
 
-# место для новых спрайтов
-    # отрисовка и изменение свойств объектов
 if __name__ == "__main__":
     p = Menu()
     p.main_menu

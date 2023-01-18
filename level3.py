@@ -47,7 +47,7 @@ tile_images = {
     'lake': pygame.transform.scale(load_image('materials/images/lake_picture.png'), (80, 80)),
     'finish': pygame.transform.scale(load_image('materials/images/finish.png'), (80, 80))
 }
-player_image = pygame.transform.scale(load_image('materials/models/robo-deliver.png'), (70, 70))
+player_image = pygame.transform.scale(load_image('materials/models/robo-deliver.png'), (60, 60))
 tile_width = tile_height = 80
 
 
@@ -128,7 +128,57 @@ class Camera:
         self.dy = -(target.rect.y + target.rect.h // 2 - HEIGHT // 2)
 
 
+class Comp_Menu(pygame.sprite.Sprite):
+    image = load_image('materials/images/completed.png')
+    image = pygame.transform.scale(image, (600, 500))
+
+    def __init__(self, x, y):
+        super().__init__(menu)
+        self.cm = Comp_Menu.image
+        self.rect = self.cm.get_rect().move(x, y)
+        self.mask = pygame.mask.from_surface(self.cm)
+        self.width = self.cm.get_width()
+        self.height = self.cm.get_height()
+
+class Comp_Next(pygame.sprite.Sprite):
+    image = load_image('materials/images/comp_next.png')
+    image = pygame.transform.scale(image, (150, 150))
+
+    def __init__(self, x, y):
+        super().__init__(menu)
+        self.cn = Comp_Next.image
+        self.rect = self.cn.get_rect().move(x, y)
+        self.mask = pygame.mask.from_surface(self.cn)
+        self.width = self.cn.get_width()
+        self.height = self.cn.get_height()
+
+class Comp_Back(pygame.sprite.Sprite):
+    image = load_image('materials/images/comp_back.png')
+    image = pygame.transform.scale(image, (150, 150))
+
+    def __init__(self, x, y):
+        super().__init__(menu)
+        self.cb = Comp_Back.image
+        self.rect = self.cb.get_rect().move(x, y)
+        self.mask = pygame.mask.from_surface(self.cb)
+        self.width = self.cb.get_width()
+        self.height = self.cb.get_height()
+
+class Comp_Main(pygame.sprite.Sprite):
+    image = load_image('materials/images/comp_menu.png')
+    image = pygame.transform.scale(image, (245, 125))
+
+    def __init__(self, x, y):
+        super().__init__(menu)
+        self.cm = Comp_Main.image
+        self.rect = self.cm.get_rect().move(x, y)
+        self.mask = pygame.mask.from_surface(self.cm)
+        self.width = self.cm.get_width()
+        self.height = self.cm.get_height()
+
+
 camera = Camera()
+menu = pygame.sprite.Group()
 running = True
 x_chages, y_chages = 0, 0
 reaction = True
@@ -184,9 +234,29 @@ while running:
         text_t = font.render(f'{round((time.time() - now), 1)}', True, (255, 255, 255))
         SCREEN.blit(text_t, (350, 10))
     if texting_show:
-        text_t = font.render(f'FINISH with result: {round((time_out - now), 3)}', True, (0, 0, 0))
-        SCREEN.blit(text_t, (350, 10))
-        time_go = False
+        menu_table = Comp_Menu(100, 50)
+        menu_main = Comp_Main(282, 385)
+
+        SCREEN.blit(load_image("materials/images/bg1.png"), (0, -200))
+        menu.draw(SCREEN)
+        clock.tick(30)  # 30 кадров в секунду
+        pygame.display.flip()
+
+        running1 = True
+        while running1:
+            for event1 in pygame.event.get():
+                if event1.type == pygame.QUIT:
+                    running1 = False
+                if event1.type == pygame.MOUSEBUTTONDOWN:
+                    if menu_main.rect.x < event1.pos[0] < menu_main.width + menu_main.rect.x and \
+                            menu_main.rect.y < event1.pos[1] < menu_main.height + menu_main.rect.y:
+                        from test import Menu
+
+                        p = Menu()
+                        p.main_menu()
+                        running1 = False
+        running = False
+
     pygame.display.flip()
     clock.tick(FPS)
 pygame.quit()

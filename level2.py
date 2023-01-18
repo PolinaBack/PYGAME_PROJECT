@@ -74,7 +74,7 @@ class Other_Cars(pygame.sprite.Sprite):
 
 
 class Yandex_Robo_Delivery(pygame.sprite.Sprite):
-    image = pygame.transform.scale(load_image('materials/models/robo-deliver.png'), (120, 150))
+    image = pygame.transform.scale(load_image('materials/models/robo-deliver.png'), (100, 130))
 
     def __init__(self, x, y):
         super().__init__(all_sprites)
@@ -85,13 +85,13 @@ class Yandex_Robo_Delivery(pygame.sprite.Sprite):
     def update(self):
         global reaction
         if pygame.sprite.collide_mask(self, other_car):
-            menu_table = Comp_Menu(100, 50)
-            menu_next = Comp_Next(520, 385)
-            menu_back = Comp_Back(130, 375)
-            menu_main = Comp_Main(282, 385)
+            fail_table = Fail_Menu(100, 50)
+            fail_repeat = Fail_Repeat(400, 400)
+            fail_main = Fail_Main(150, 405)
 
-            SCREEN.blit(load_image("materials/images/bg1.png"), (0, -200))
-            menu.draw(SCREEN)
+            SCREEN.blit(load_image('materials/images/good_background.png'), (0, 0))
+            SCREEN.blit(load_image('materials/images/good_background.png'), (600, 0))
+            fail.draw(SCREEN)
             clock.tick(30)  # 30 кадров в секунду
             pygame.display.flip()
 
@@ -101,32 +101,27 @@ class Yandex_Robo_Delivery(pygame.sprite.Sprite):
                     if event1.type == pygame.QUIT:
                         running1 = False
                     if event1.type == pygame.MOUSEBUTTONDOWN:
-                        if menu_next.rect.x < event1.pos[0] < menu_next.width + menu_next.rect.x and \
-                                menu_next.rect.y < event1.pos[1] < menu_next.height + menu_next.rect.y:
-                            import level3
-                            running1 = False
-                        if menu_main.rect.x < event1.pos[0] < menu_main.width + menu_main.rect.x and \
-                                menu_main.rect.y < event1.pos[1] < menu_main.height + menu_main.rect.y:
+                        if fail_main.rect.x < event1.pos[0] < fail_main.width + fail_main.rect.x and \
+                                fail_main.rect.y < event1.pos[1] < fail_main.height + fail_main.rect.y:
                             from test import Menu
                             p = Menu()
                             p.main_menu()
                             running1 = False
-                        if menu_back.rect.x < event1.pos[0] < menu_back.width + menu_back.rect.x and \
-                                menu_back.rect.y < event1.pos[1] < menu_back.height + menu_back.rect.y:
-                            import level1
+                        if fail_repeat.rect.x < event1.pos[0] < fail_repeat.width + fail_repeat.rect.x and \
+                                fail_repeat.rect.y < event1.pos[1] < fail_repeat.height + fail_repeat.rect.y:
+                            import level2
                             running1 = False
-            self.rect.y += 7
-            time.sleep(1)
             reaction = False
+            time.sleep(1)
 
         if pygame.sprite.collide_mask(self, other_car2):
-            menu_table = Comp_Menu(100, 50)
-            menu_next = Comp_Next(520, 385)
-            menu_back = Comp_Back(130, 375)
-            menu_main = Comp_Main(282, 385)
+            fail_table = Fail_Menu(100, 50)
+            fail_repeat = Fail_Repeat(400, 400)
+            fail_main = Fail_Main(150, 405)
 
-            SCREEN.blit(load_image("materials/images/bg1.png"), (0, -200))
-            menu.draw(SCREEN)
+            SCREEN.blit(load_image('materials/images/good_background.png'), (0, 0))
+            SCREEN.blit(load_image('materials/images/good_background.png'), (600, 0))
+            fail.draw(SCREEN)
             clock.tick(30)  # 30 кадров в секунду
             pygame.display.flip()
 
@@ -136,32 +131,27 @@ class Yandex_Robo_Delivery(pygame.sprite.Sprite):
                     if event1.type == pygame.QUIT:
                         running1 = False
                     if event1.type == pygame.MOUSEBUTTONDOWN:
-                        if menu_next.rect.x < event1.pos[0] < menu_next.width + menu_next.rect.x and \
-                                menu_next.rect.y < event1.pos[1] < menu_next.height + menu_next.rect.y:
-                            import level3
-                            running1 = False
-                        if menu_main.rect.x < event1.pos[0] < menu_main.width + menu_main.rect.x and \
-                                menu_main.rect.y < event1.pos[1] < menu_main.height + menu_main.rect.y:
+                        if fail_main.rect.x < event1.pos[0] < fail_main.width + fail_main.rect.x and \
+                                fail_main.rect.y < event1.pos[1] < fail_main.height + fail_main.rect.y:
                             from test import Menu
                             p = Menu()
                             p.main_menu()
                             running1 = False
-                        if menu_back.rect.x < event1.pos[0] < menu_back.width + menu_back.rect.x and \
-                                menu_back.rect.y < event1.pos[1] < menu_back.height + menu_back.rect.y:
-                            import level1
+                        if fail_repeat.rect.x < event1.pos[0] < fail_repeat.width + fail_repeat.rect.x and \
+                                fail_repeat.rect.y < event1.pos[1] < fail_repeat.height + fail_repeat.rect.y:
+                            import level2
                             running1 = False
-            self.rect.y += 7
             reaction = False
             time.sleep(1)
 
         elif self.rect.x > 490 or self.rect.x < 185:
-            menu_table = Comp_Menu(100, 50)
-            menu_next = Comp_Next(520, 385)
-            menu_back = Comp_Back(130, 375)
-            menu_main = Comp_Main(282, 385)
+            fail_table = Fail_Menu(100, 50)
+            fail_repeat = Fail_Repeat(400, 400)
+            fail_main = Fail_Main(150, 405)
 
-            SCREEN.blit(load_image("materials/images/bg1.png"), (0, -200))
-            menu.draw(SCREEN)
+            SCREEN.blit(load_image('materials/images/good_background.png'), (0, 0))
+            SCREEN.blit(load_image('materials/images/good_background.png'), (600, 0))
+            fail.draw(SCREEN)
             clock.tick(30)  # 30 кадров в секунду
             pygame.display.flip()
 
@@ -171,19 +161,15 @@ class Yandex_Robo_Delivery(pygame.sprite.Sprite):
                     if event1.type == pygame.QUIT:
                         running1 = False
                     if event1.type == pygame.MOUSEBUTTONDOWN:
-                        if menu_next.rect.x < event1.pos[0] < menu_next.width + menu_next.rect.x and \
-                                menu_next.rect.y < event1.pos[1] < menu_next.height + menu_next.rect.y:
-                            import level3
-                            running1 = False
-                        if menu_main.rect.x < event1.pos[0] < menu_main.width + menu_main.rect.x and \
-                                menu_main.rect.y < event1.pos[1] < menu_main.height + menu_main.rect.y:
+                        if fail_main.rect.x < event1.pos[0] < fail_main.width + fail_main.rect.x and \
+                                fail_main.rect.y < event1.pos[1] < fail_main.height + fail_main.rect.y:
                             from test import Menu
                             p = Menu()
                             p.main_menu()
                             running1 = False
-                        if menu_back.rect.x < event1.pos[0] < menu_back.width + menu_back.rect.x and \
-                                menu_back.rect.y < event1.pos[1] < menu_back.height + menu_back.rect.y:
-                            import level1
+                        if fail_repeat.rect.x < event1.pos[0] < fail_repeat.width + fail_repeat.rect.x and \
+                                fail_repeat.rect.y < event1.pos[1] < fail_repeat.height + fail_repeat.rect.y:
+                            import level2
                             running1 = False
             reaction = False
             time.sleep(1)
@@ -200,7 +186,6 @@ class Finish(pygame.sprite.Sprite):
     def moving(self, score, robot):
         global text_showing
         self.rect = self.rect.move(0, score)
-        print(self.rect)
         if pygame.sprite.collide_mask(self, robot):
             text_showing = True
 
@@ -212,6 +197,18 @@ class Comp_Menu(pygame.sprite.Sprite):
     def __init__(self, x, y):
         super().__init__(menu)
         self.cm = Comp_Menu.image
+        self.rect = self.cm.get_rect().move(x, y)
+        self.mask = pygame.mask.from_surface(self.cm)
+        self.width = self.cm.get_width()
+        self.height = self.cm.get_height()
+
+class Fail_Menu(pygame.sprite.Sprite):
+    image = load_image('materials/images/failed.png')
+    image = pygame.transform.scale(image, (600, 500))
+
+    def __init__(self, x, y):
+        super().__init__(fail)
+        self.cm = Fail_Menu.image
         self.rect = self.cm.get_rect().move(x, y)
         self.mask = pygame.mask.from_surface(self.cm)
         self.width = self.cm.get_width()
@@ -253,6 +250,30 @@ class Comp_Main(pygame.sprite.Sprite):
         self.width = self.cm.get_width()
         self.height = self.cm.get_height()
 
+class Fail_Main(pygame.sprite.Sprite):
+    image = load_image('materials/images/comp_menu.png')
+    image = pygame.transform.scale(image, (245, 108))
+
+    def __init__(self, x, y):
+        super().__init__(fail)
+        self.cm = Fail_Main.image
+        self.rect = self.cm.get_rect().move(x, y)
+        self.mask = pygame.mask.from_surface(self.cm)
+        self.width = self.cm.get_width()
+        self.height = self.cm.get_height()
+
+class Fail_Repeat(pygame.sprite.Sprite):
+    image = load_image('materials/images/repeat.png')
+    image = pygame.transform.scale(image, (245, 125))
+
+    def __init__(self, x, y):
+        super().__init__(fail)
+        self.cm = Fail_Main.image
+        self.rect = self.cm.get_rect().move(x, y)
+        self.mask = pygame.mask.from_surface(self.cm)
+        self.width = self.cm.get_width()
+        self.height = self.cm.get_height()
+
 reaction = True
 x_chages, y_chages = 0, 0
 x = 340
@@ -262,6 +283,7 @@ clock = pygame.time.Clock()
 pygame.display.set_caption("Level 2")
 all_sprites = pygame.sprite.Group()
 menu = pygame.sprite.Group()
+fail = pygame.sprite.Group()
 other_car_sprite = pygame.sprite.Group()
 finish = Finish(200, -100)
 robot_delivery = Yandex_Robo_Delivery(x, y)
@@ -301,15 +323,48 @@ while running:
     SCREEN.blit(load_image('materials/images/good_background.png'), (0, 0))
     SCREEN.blit(load_image('materials/images/good_background.png'), (600, 0))
 
-    if other_car.score >= 5:
+    if other_car.score >= 13:
         finish.moving(other_car.score, robot_delivery)
     all_sprites.draw(SCREEN)
     other_car.driving_other_car(other_car2)
     font = pygame.font.Font(None, 30)
     font2 = pygame.font.Font(None, 100)
     if text_showing:
-        text_t = font2.render(f'FINISH', True, (0, 0, 0))
-        SCREEN.blit(text_t, (300, 250))
+        menu_table = Comp_Menu(100, 50)
+        menu_next = Comp_Next(520, 385)
+        menu_back = Comp_Back(130, 375)
+        menu_main = Comp_Main(282, 385)
+
+        SCREEN.blit(load_image("materials/images/bg1.png"), (0, -200))
+        menu.draw(SCREEN)
+        clock.tick(30)  # 30 кадров в секунду
+        pygame.display.flip()
+
+        running1 = True
+        while running1:
+            for event1 in pygame.event.get():
+                if event1.type == pygame.QUIT:
+                    running1 = False
+                if event1.type == pygame.MOUSEBUTTONDOWN:
+                    if menu_next.rect.x < event1.pos[0] < menu_next.width + menu_next.rect.x and \
+                            menu_next.rect.y < event1.pos[1] < menu_next.height + menu_next.rect.y:
+                        import level3
+
+                        running1 = False
+                    if menu_main.rect.x < event1.pos[0] < menu_main.width + menu_main.rect.x and \
+                            menu_main.rect.y < event1.pos[1] < menu_main.height + menu_main.rect.y:
+                        from test import Menu
+
+                        p = Menu()
+                        p.main_menu()
+                        running1 = False
+                    if menu_back.rect.x < event1.pos[0] < menu_back.width + menu_back.rect.x and \
+                            menu_back.rect.y < event1.pos[1] < menu_back.height + menu_back.rect.y:
+                        import level1
+
+                        running1 = False
+        reaction = False
+        time.sleep(1)
     all_sprites.update()
     clock.tick(30)
     pygame.display.update()

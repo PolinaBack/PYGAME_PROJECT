@@ -364,8 +364,6 @@ while running:
                                         running1 = False
                         running = False
 
-                    else:
-                        print("sdfsdf")
 
                 if tell_man.rect.x < event.pos[0] < tell_man.width + tell_man.rect.x and \
                         tell_man.rect.y < event.pos[1] < tell_man.height + tell_man.rect.y:
