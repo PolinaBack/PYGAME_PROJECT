@@ -103,7 +103,7 @@ class Yandex_Robo_Delivery(pygame.sprite.Sprite):
                     if event1.type == pygame.MOUSEBUTTONDOWN:
                         if fail_main.rect.x < event1.pos[0] < fail_main.width + fail_main.rect.x and \
                                 fail_main.rect.y < event1.pos[1] < fail_main.height + fail_main.rect.y:
-                            from test import Menu
+                            from main import Menu
                             p = Menu()
                             p.main_menu()
                             running1 = False
@@ -133,7 +133,7 @@ class Yandex_Robo_Delivery(pygame.sprite.Sprite):
                     if event1.type == pygame.MOUSEBUTTONDOWN:
                         if fail_main.rect.x < event1.pos[0] < fail_main.width + fail_main.rect.x and \
                                 fail_main.rect.y < event1.pos[1] < fail_main.height + fail_main.rect.y:
-                            from test import Menu
+                            from main import Menu
                             p = Menu()
                             p.main_menu()
                             running1 = False
@@ -163,7 +163,7 @@ class Yandex_Robo_Delivery(pygame.sprite.Sprite):
                     if event1.type == pygame.MOUSEBUTTONDOWN:
                         if fail_main.rect.x < event1.pos[0] < fail_main.width + fail_main.rect.x and \
                                 fail_main.rect.y < event1.pos[1] < fail_main.height + fail_main.rect.y:
-                            from test import Menu
+                            from main import Menu
                             p = Menu()
                             p.main_menu()
                             running1 = False
@@ -353,7 +353,7 @@ while running:
                         running1 = False
                     if menu_main.rect.x < event1.pos[0] < menu_main.width + menu_main.rect.x and \
                             menu_main.rect.y < event1.pos[1] < menu_main.height + menu_main.rect.y:
-                        from test import Menu
+                        from main import Menu
 
                         p = Menu()
                         p.main_menu()
