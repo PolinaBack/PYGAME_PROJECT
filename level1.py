@@ -1,30 +1,34 @@
 import random
 from collections import Counter
-
 import pygame
 import os
 import sys
 
+# Инициализация констант и pygame
 pygame.init()
 clock = pygame.time.Clock()
 SIZE = WIDTH, HEIGHT = 800, 600
 SCREEN = pygame.display.set_mode(SIZE)
 
+# создание списка, для вывода списка продуктов
 mess = []
 font = pygame.font.Font(None, 30)
 x_mess = 10
+# рандомный выбор озвучки заказа
 choice1 = random.choice(["materials/audios/order1.wav", "materials/audios/order2.wav"])
 if choice1 == "materials/audios/order2.wav":
     correct_check = ['Цезарь Ролл-----1', 'Куриные наггетсы-----1', 'Кофе----2', 'Пирожок с вишней----3', 'Пирожок с яблоком----3']
 else:
     correct_check = ['Картофель Фри----3', 'Куриные наггетсы-----1', 'Биг Мак----2', 'Кока-Кола----3']
-
 sound_1 = pygame.mixer.Sound(choice1)
 
+# установка заднего фона
 bg = pygame.image.load("materials/images/bg1.png")
 SCREEN.blit(bg, (0, 0))
 pygame.display.flip()
 
+
+# функция, скачивающая и изменяющая по надобности изображения
 def load_image(name, colorkey=None):
     fullname = os.path.join(name)
     if not os.path.isfile(fullname):
@@ -41,6 +45,7 @@ def load_image(name, colorkey=None):
     return image
 
 
+# класс Картофеля Фри
 class Fries_Potato(pygame.sprite.Sprite):
     image = pygame.transform.scale(load_image('materials/models/fries.png'), (130, 130))
 
@@ -53,6 +58,8 @@ class Fries_Potato(pygame.sprite.Sprite):
         self.width = self.fries.get_width()
         self.height = self.fries.get_height()
 
+
+# класс Кофе
 class Coffee_c(pygame.sprite.Sprite):
     image = pygame.transform.scale(load_image('materials/models/coffe.png'), (100, 140))
 
@@ -65,6 +72,8 @@ class Coffee_c(pygame.sprite.Sprite):
         self.width = self.coffee.get_width()
         self.height = self.coffee.get_height()
 
+
+# класс Яблочного пирожка
 class Apple_Pie_a(pygame.sprite.Sprite):
     image = pygame.transform.scale(load_image('materials/models/apple pie.png'), (162, 120))
 
@@ -77,6 +86,8 @@ class Apple_Pie_a(pygame.sprite.Sprite):
         self.width = self.apple.get_width()
         self.height = self.apple.get_height()
 
+
+# класс БигМака
 class BigMac(pygame.sprite.Sprite):
     image = pygame.transform.scale(load_image('materials/models/bigmac.png'), (166, 120))
 
@@ -89,6 +100,8 @@ class BigMac(pygame.sprite.Sprite):
         self.width = self.bigmac.get_width()
         self.height = self.bigmac.get_height()
 
+
+# класс Цезарь Ролла
 class Cezar_Roll_c(pygame.sprite.Sprite):
     image = pygame.transform.scale(load_image('materials/models/cezar roll.png'), (126, 189))
 
@@ -101,6 +114,8 @@ class Cezar_Roll_c(pygame.sprite.Sprite):
         self.width = self.cezar_roll.get_width()
         self.height = self.cezar_roll.get_height()
 
+
+# класс Вишневого пирожка
 class Cherry_Pie_c(pygame.sprite.Sprite):
     image = pygame.transform.scale(load_image('materials/models/cherry pie.png'), (162, 120))
 
@@ -113,6 +128,8 @@ class Cherry_Pie_c(pygame.sprite.Sprite):
         self.width = self.cherry_pie.get_width()
         self.height = self.cherry_pie.get_height()
 
+
+# класс Кока-колы
 class Coca_cola_c(pygame.sprite.Sprite):
     image = pygame.transform.scale(load_image('materials/models/cola.png'), (140, 140))
 
@@ -125,6 +142,8 @@ class Coca_cola_c(pygame.sprite.Sprite):
         self.width = self.coca_cola.get_width()
         self.height = self.coca_cola.get_height()
 
+
+# класс Наггетсов
 class Nuggets_n(pygame.sprite.Sprite):
     image = pygame.transform.scale(load_image('materials/models/nuggets.png'), (132, 120))
 
@@ -137,35 +156,43 @@ class Nuggets_n(pygame.sprite.Sprite):
         self.width = self.nuggets.get_width()
         self.height = self.nuggets.get_height()
 
-class Tell_Men(pygame.sprite.Sprite):
-    image = pygame.transform.scale(load_image('materials/images/man_silence.png'), (150, 250))
 
-    def __init__(self, x, y):
+# класс анимации говорящего человечка
+class AnimatedSprite(pygame.sprite.Sprite):
+    def __init__(self, sheet, columns, rows, x, y):
         super().__init__(all_sprites)
-        self.x, self.y = x, y
-        self.man = Tell_Men.image
-        self.rect = self.man.get_rect().move(x, y)
-        self.mask = pygame.mask.from_surface(self.man)
-        self.width = self.man.get_width()
-        self.height = self.man.get_height()
+        self.frames = []
+        self.cut_sheet(sheet, columns, rows)
+        self.cur_frame = 0
+        self.image = self.frames[self.cur_frame]
+        self.rect = self.rect.move(x, y)
+        self.width = self.image.get_width()
+        self.height = self.image.get_height()
+        self.count = 2
+
+    # функция разделения картинок
+    def cut_sheet(self, sheet, columns, rows):
+        self.rect = pygame.Rect(0, 0, sheet.get_width() // columns,
+                                sheet.get_height() // rows)
+        for j in range(rows):
+            for i in range(columns):
+                frame_location = (self.rect.w * i, self.rect.h * j)
+                self.frames.append(sheet.subsurface(pygame.Rect(
+                    frame_location, self.rect.size)))
+
+    # функция смены картинок и звука
+    def update(self):
+        self.cur_frame = (self.cur_frame + 1) % len(self.frames)
+        self.image = self.frames[self.cur_frame]
+        if self.count % 2 == 0:
+            sound_1.set_volume(20)
+            sound_1.play()
+        else:
+            sound_1.stop()
+        self.count += 1
 
 
-class Tell_Men_tell(pygame.sprite.Sprite):
-    image = pygame.transform.scale(load_image('materials/images/man_telling.png'), (150, 250))
-
-    def __init__(self, x, y):
-        super().__init__(all_sprites)
-        self.x, self.y = x, y
-        self.man = Tell_Men_tell.image
-        self.rect = self.man.get_rect().move(x, y)
-        self.mask = pygame.mask.from_surface(self.man)
-        self.width = self.man.get_width()
-        self.height = self.man.get_height()
-
-    def he_tell(self, sound):
-        sound.set_volume(20)
-        sound.play()
-
+# класс Яндекс.Ровера
 class Yandex_Robo_Delivery2(pygame.sprite.Sprite):
     image = pygame.transform.scale(load_image('materials/models/robo-deliver.png'), (220, 250))
 
@@ -179,6 +206,8 @@ class Yandex_Robo_Delivery2(pygame.sprite.Sprite):
         self.mess = []
         self.trash = []
 
+    # функция реакции по попытке добавления продуктов в робо-станцию
+    # и обновления списка добавленных продуктов
     def update(self, other_obg):
         other_obg.rect.x, other_obg.rect.y = other_obg.x, other_obg.y
         if all_objects[other_obg] not in self.trash:
@@ -189,6 +218,7 @@ class Yandex_Robo_Delivery2(pygame.sprite.Sprite):
             c = all_objects[other_obg][:-1] + str(int(self.mess[position][-1]) + 1)
             del self.mess[position]
             self.mess.insert(position, c)
+
 
 class Error_end(pygame.sprite.Sprite):
     image = load_image('materials/images/end_level1.png')
@@ -202,6 +232,7 @@ class Error_end(pygame.sprite.Sprite):
         self.width = self.stop_end.get_width()
         self.height = self.stop_end.get_height()
 
+
 class Comp_Menu(pygame.sprite.Sprite):
     image = load_image('materials/images/completed.png')
     image = pygame.transform.scale(image, (600, 500))
@@ -213,6 +244,7 @@ class Comp_Menu(pygame.sprite.Sprite):
         self.mask = pygame.mask.from_surface(self.cm)
         self.width = self.cm.get_width()
         self.height = self.cm.get_height()
+
 
 class Comp_Next(pygame.sprite.Sprite):
     image = load_image('materials/images/comp_next.png')
@@ -226,6 +258,7 @@ class Comp_Next(pygame.sprite.Sprite):
         self.width = self.cn.get_width()
         self.height = self.cn.get_height()
 
+
 class Comp_Back(pygame.sprite.Sprite):
     image = load_image('materials/images/comp_back.png')
     image = pygame.transform.scale(image, (150, 150))
@@ -237,6 +270,7 @@ class Comp_Back(pygame.sprite.Sprite):
         self.mask = pygame.mask.from_surface(self.cb)
         self.width = self.cb.get_width()
         self.height = self.cb.get_height()
+
 
 class Comp_Main(pygame.sprite.Sprite):
     image = load_image('materials/images/comp_menu.png')
@@ -263,35 +297,23 @@ class Check_order(pygame.sprite.Sprite):
         self.width = self.check_end.get_width()
         self.height = self.check_end.get_height()
 
-    # def update(self, other_obg):
-    #     other_obg.rect.x, other_obg.rect.y = other_obg.x, other_obg.y
-    #     if all_objects[other_obg] not in self.trash:
-    #         self.trash.append(all_objects[other_obg])
-    #         self.mess.append(all_objects[other_obg] + '1')
-    #     else:
-    #         position = self.trash.index(all_objects[other_obg])
-    #         c = all_objects[other_obg][:-1] + str(int(self.mess[position][-1]) + 1)
-    #         del self.mess[position]
-    #         self.mess.insert(position, c)
 
-
-
+# параметры, необходимые для выполнения игры
+# параметры работающие в цикле
 running = True
 rect_go = False
 x_pos, y_pos = 0, 0
-
-
 pygame.display.set_caption("Level 1")
 all_sprites = pygame.sprite.Group()
 menu = pygame.sprite.Group()
 all_objects = {}
 n = 0
 count = 0
+# создание объектов классов
 robot_delivery = Yandex_Robo_Delivery2(250, 345)
 stop = Error_end(10, 500)
 check = Check_order(630, 500)
-tell_man_tell = Tell_Men_tell(490, 320)
-tell_man = Tell_Men(490, 320)
+men = AnimatedSprite(load_image("materials/images/anima_men.png"), 2, 1, 490, 320)
 coffee_d = Coffee_c(160, 0)
 all_objects[coffee_d] = 'Кофе-----'
 fries_p = Fries_Potato(10, 0)
@@ -309,10 +331,12 @@ all_objects[coca_cola] = 'Кока-Кола-----'
 nuggets = Nuggets_n(480, 170)
 all_objects[nuggets] = 'Куриные наггетсы-----'
 
+
 def compare(x, y):
     return Counter(x) == Counter(y)
 
 
+# основной цикл программы
 while running:
     SCREEN.blit(load_image("materials/images/bg1.png"), (0, -200))
     all_sprites.draw(SCREEN)
@@ -324,18 +348,24 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            # воспроизведение заказа
+            if men.rect.x < event.pos[0] < men.width + men.rect.x and \
+                    men.rect.y < event.pos[1] < men.height + men.rect.y:
+                men.update()
         for obg in all_objects:
             if event.type == pygame.MOUSEBUTTONDOWN:
+                # печать заказа слева
                 if stop.rect.x < event.pos[0] < stop.width + stop.rect.x and \
                         stop.rect.y < event.pos[1] < stop.height + stop.rect.y:
                     mess = []
                     robot_delivery.mess = []
                     robot_delivery.trash = []
-
                 # Провека на переход к следущему уровню
                 if check.rect.x < event.pos[0] < check.width + check.rect.x and \
                         check.rect.y < event.pos[1] < check.height + check.rect.y:
-                    if compare(correct_check, mess): # сделать переход на некст уровень
+                    # сделать переход на некст уровень
+                    if compare(correct_check, mess):
                         menu_table = Comp_Menu(100, 50)
                         menu_next = Comp_Next(520, 385)
                         menu_back = Comp_Back(130, 375)
@@ -343,9 +373,8 @@ while running:
 
                         SCREEN.blit(load_image("materials/images/bg1.png"), (0, -200))
                         menu.draw(SCREEN)
-                        clock.tick(30)  # 30 кадров в секунду
+                        clock.tick(30)
                         pygame.display.flip()
-
                         running1 = True
                         while running1:
                             for event1 in pygame.event.get():
@@ -363,18 +392,11 @@ while running:
                                         p.main_menu()
                                         running1 = False
                         running = False
-
-
-                if tell_man.rect.x < event.pos[0] < tell_man.width + tell_man.rect.x and \
-                        tell_man.rect.y < event.pos[1] < tell_man.height + tell_man.rect.y:
-                    all_sprites.remove(tell_man)
-                    tell_man_tell.he_tell(sound_1)
                 if obg.rect.x < event.pos[0] < obg.rect.x + obg.width \
                         and obg.rect.y < event.pos[1] < obg.rect.y + obg.height:
                     rect_go = True
                     n = obg
-            if not pygame.mixer.get_busy():
-                all_sprites.add(tell_man)
+            # перемещение продукта в робо-станцию
             if event.type == pygame.MOUSEMOTION and rect_go and obg == n:
                 n.rect.x, n.rect.y = n.rect.x + event.rel[0], n.rect.y + event.rel[1]
             if event.type == pygame.MOUSEBUTTONUP and obg == n:

@@ -1,14 +1,15 @@
 import pygame
 import os
 import sys
-import random
 
-
+# Инициализация констант и pygame
 pygame.init()
 SIZE = WIDTH, HEIGHT = 800, 600
 SCREEN = pygame.display.set_mode(SIZE)
 all_sprites = pygame.sprite.Group()
 
+
+# функция, скачивающая и изменяющая по надобности изображения
 def load_image(name, colorkey=None):
     fullname = os.path.join(name)
     if not os.path.isfile(fullname):
@@ -25,6 +26,7 @@ def load_image(name, colorkey=None):
     return image
 
 
+# кнопка "ИГРАТЬ"
 class Start_Button(pygame.sprite.Sprite):
     image = pygame.transform.scale(load_image('materials/images/start_btn.png'), (350, 100))
 
@@ -38,6 +40,7 @@ class Start_Button(pygame.sprite.Sprite):
         self.height = self.sb.get_height()
 
 
+# кнопка "ВЫБРАТЬ УРОВЕНЬ"
 class Choose_Button(pygame.sprite.Sprite):
     image = pygame.transform.scale(load_image('materials/images/choose_btn.png'), (350, 100))
 
@@ -51,6 +54,7 @@ class Choose_Button(pygame.sprite.Sprite):
         self.height = self.cb.get_height()
 
 
+# кнопка "ИНСТРУКЦИЯ"
 class Rules_Button(pygame.sprite.Sprite):
     image = pygame.transform.scale(load_image('materials/images/rules_btn.png'), (350, 100))
 
@@ -64,6 +68,7 @@ class Rules_Button(pygame.sprite.Sprite):
         self.height = self.rb.get_height()
 
 
+# кнопка "ГЛАВНОЕ МЕНЮ"
 class Back_Button(pygame.sprite.Sprite):
     image = pygame.transform.scale(load_image('materials/images/back_btn.png'), (310, 70))
 
@@ -75,6 +80,7 @@ class Back_Button(pygame.sprite.Sprite):
         self.mask = pygame.mask.from_surface(self.bb)
         self.width = self.bb.get_width()
         self.height = self.bb.get_height()
+
 
 class Back_Button1(pygame.sprite.Sprite):
     image = pygame.transform.scale(load_image('materials/images/back_btn.png'), (360, 100))
@@ -88,6 +94,8 @@ class Back_Button1(pygame.sprite.Sprite):
         self.width = self.bb.get_width()
         self.height = self.bb.get_height()
 
+
+# кнопка "ВЫХОД"
 class Quit_Button(pygame.sprite.Sprite):
     image = pygame.transform.scale(load_image('materials/images/quit_btn.png'), (350, 100))
 
@@ -101,6 +109,8 @@ class Quit_Button(pygame.sprite.Sprite):
         self.height = self.qb.get_height()
 
 
+# кнопка "1"
+# класс, работающий при выборе 1 уровня
 class F_Lvl_Button(pygame.sprite.Sprite):
     image = pygame.transform.scale(load_image('materials/images/1_lvl_btn.png'), (200, 200))
 
@@ -114,6 +124,8 @@ class F_Lvl_Button(pygame.sprite.Sprite):
         self.height = self.flb.get_height()
 
 
+# кнопка "2"
+# класс, работающий при выборе 2 уровня
 class S_Lvl_Button(pygame.sprite.Sprite):
     image = pygame.transform.scale(load_image('materials/images/2_lvl_btn.png'), (200, 200))
 
@@ -127,6 +139,8 @@ class S_Lvl_Button(pygame.sprite.Sprite):
         self.height = self.slb.get_height()
 
 
+# кнопка "3"
+# класс, работающий при выборе 3 уровня
 class T_Lvl_Button(pygame.sprite.Sprite):
     image = pygame.transform.scale(load_image('materials/images/3_lvl_btn.png'), (200, 200))
 
@@ -139,11 +153,16 @@ class T_Lvl_Button(pygame.sprite.Sprite):
         self.width = self.tlb.get_width()
         self.height = self.tlb.get_height()
 
+
+# параметры, необходимые для выполнения игры
+# параметры работающие в цикле
 clock = pygame.time.Clock()
 pygame.display.set_caption('Yandex Simulator')
 back_sprite = pygame.sprite.Group()
 lvl_sprites = pygame.sprite.Group()
 
+
+# класс главного меню (стартового окна)
 class Menu:
     def __init__(self):
         self.main_menu()
@@ -195,7 +214,7 @@ class Menu:
         back_btn = Back_Button1(430, 500)
         SCREEN.blit(load_image("materials/images/main_bg.png"), (-300, 0))
         lvl_sprites.draw(SCREEN)
-        clock.tick(30)  # 30 кадров в секунду
+        clock.tick(30)
         pygame.display.flip()
 
         running = True
@@ -220,7 +239,6 @@ class Menu:
                             back_btn.rect.y < event.pos[1] < back_btn.height + back_btn.rect.y:
                         self.main_menu()
 
-
     def rules(self):
         back_btn = Back_Button(460, 530)
         SCREEN.blit(load_image("materials/images/main_bg.png"), (-300, 0))
@@ -238,7 +256,6 @@ class Menu:
                     if back_btn.rect.x < event.pos[0] < back_btn.width + back_btn.rect.x and \
                             back_btn.rect.y < event.pos[1] < back_btn.height + back_btn.rect.y:
                         self.main_menu()
-
 
 
 if __name__ == "__main__":

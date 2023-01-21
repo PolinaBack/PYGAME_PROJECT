@@ -3,14 +3,15 @@ import pygame
 import os
 import sys
 
+# Инициализация констант и pygame
 pygame.init()
 SIZE = WIDTH, HEIGHT = 800, 600
 SCREEN = pygame.display.set_mode(SIZE)
 pygame.display.set_caption("Level 3")
-
 FPS = 50
 clock = pygame.time.Clock()
 player = None
+
 all_sprites = pygame.sprite.Group()
 tiles_group = pygame.sprite.Group()
 player_group = pygame.sprite.Group()
@@ -18,6 +19,7 @@ font = pygame.font.Font(None, 30)
 texting_show = False
 
 
+# функция, скачивающая и изменяющая по надобности изображения
 def load_image(name, color_key=None):
     fullname = os.path.join(name)
     try:
@@ -34,12 +36,14 @@ def load_image(name, color_key=None):
     return image
 
 
+# функция по загрузке уровня из level3.txt
 def load_level(filename):
     with open(filename, 'r') as mapFile:
         level_map = [line.strip() for line in mapFile]
     max_width = max(map(len, level_map))
     return [line.ljust(max_width, '.') for line in level_map]
 
+# создание словаря с названием объектов и их картинками
 tile_images = {
     'wall': pygame.transform.scale(load_image('materials/images/box.png'), (80, 80)),
     'empty': pygame.transform.scale(load_image('materials/images/tales2.jpg'), (80, 80)),
@@ -51,6 +55,7 @@ player_image = pygame.transform.scale(load_image('materials/models/robo-deliver.
 tile_width = tile_height = 80
 
 
+# класс по олицетворению всех картинок и клетчатого поля
 class Tile(pygame.sprite.Sprite):
     def __init__(self, tile_type, pos_x, pos_y):
         super().__init__(tiles_group, all_sprites)
@@ -61,12 +66,14 @@ class Tile(pygame.sprite.Sprite):
         self.rect = self.image.get_rect().move(pos_x * tile_width, pos_y * tile_height)
 
 
+# класс Яндекс.Ровера
 class Player(pygame.sprite.Sprite):
     def __init__(self, pos_x, pos_y):
         super().__init__(player_group, all_sprites)
         self.image = player_image
         self.rect = self.image.get_rect().move(pos_x * tile_width + 2, pos_y * tile_height + 2)
 
+    # функция, отслеживающая перемещения и столкновение робо-станции
     def wall_crash(self, col_obj):
         global texting_show, time_out
         if pygame.sprite.collide_rect(self, col_obj) and col_obj.image == tile_images['wall']\
@@ -75,9 +82,6 @@ class Player(pygame.sprite.Sprite):
         elif pygame.sprite.collide_rect(self, col_obj) and col_obj.image == tile_images['wall']\
                 and (button == 'up' or button == 'down'):
             player.rect.y -= y_chages
-        # if pygame.sprite.collide_rect(self, col_obj) and col_obj.image == tile_images['bush'] \
-        #         and (button == 'right' or button == 'left'):
-        #     player.image.set_alpha(150)
         if pygame.sprite.collide_rect(self, col_obj) and col_obj.image == tile_images['bush']:
             player.image.set_alpha(150)
         if pygame.sprite.collide_rect(self, col_obj) and col_obj.image == tile_images['lake'] \
@@ -93,6 +97,7 @@ class Player(pygame.sprite.Sprite):
             SCREEN.blit(text_t, (350, 10))
 
 
+# функция, генерирующая уровень и отправляющая запросы на создания объектов
 def generate_level(level):
     new_player, x, y = None, None, None
     for y in range(len(level)):
@@ -113,16 +118,20 @@ def generate_level(level):
                 Tile('finish', x, y)
     return new_player, x, y
 
+
 player, level_x, level_y = generate_level(load_level("materials/data/level3.txt"))
 
 
+# класс камеры, помогающий отслеживать перемещение робо-станции
 class Camera:
     def __init__(self):
         self.dx = 0
         self.dy = 0
+
     def apply(self, obj):
         obj.rect.x += self.dx
         obj.rect.y += self.dy
+
     def update(self, target):
         self.dx = -(target.rect.x + target.rect.w // 2 - WIDTH // 2)
         self.dy = -(target.rect.y + target.rect.h // 2 - HEIGHT // 2)
@@ -140,6 +149,7 @@ class Comp_Menu(pygame.sprite.Sprite):
         self.width = self.cm.get_width()
         self.height = self.cm.get_height()
 
+
 class Comp_Next(pygame.sprite.Sprite):
     image = load_image('materials/images/comp_next.png')
     image = pygame.transform.scale(image, (150, 150))
@@ -152,6 +162,7 @@ class Comp_Next(pygame.sprite.Sprite):
         self.width = self.cn.get_width()
         self.height = self.cn.get_height()
 
+
 class Comp_Back(pygame.sprite.Sprite):
     image = load_image('materials/images/comp_back.png')
     image = pygame.transform.scale(image, (150, 150))
@@ -163,6 +174,7 @@ class Comp_Back(pygame.sprite.Sprite):
         self.mask = pygame.mask.from_surface(self.cb)
         self.width = self.cb.get_width()
         self.height = self.cb.get_height()
+
 
 class Comp_Main(pygame.sprite.Sprite):
     image = load_image('materials/images/comp_menu.png')
@@ -177,6 +189,8 @@ class Comp_Main(pygame.sprite.Sprite):
         self.height = self.cm.get_height()
 
 
+# параметры, необходимые для выполнения игры
+# параметры работающие в цикле
 camera = Camera()
 menu = pygame.sprite.Group()
 running = True
@@ -203,19 +217,13 @@ while running:
                 button = 'right'
                 player.image = pygame.transform.rotate(player_image, 270)
             elif event.key == pygame.K_UP and reaction:
-                # if y_chages - block + player.rect.y > 0:
                 y_chages -= block
                 button = 'up'
                 player.image = pygame.transform.rotate(player_image, 0)
-                # else:
-                #     y_chages = 0
             elif event.key == pygame.K_DOWN and reaction:
-                # if y_chages + block + player.rect.y + 150 < HEIGHT:
                 y_chages += block
                 button = 'down'
                 player.image = pygame.transform.rotate(player_image, 180)
-                # else:
-                #     y_chages = 0
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT \
                     or event.key == pygame.K_DOWN or event.key == pygame.K_UP:
@@ -239,7 +247,7 @@ while running:
 
         SCREEN.blit(load_image("materials/images/bg1.png"), (0, -200))
         menu.draw(SCREEN)
-        clock.tick(30)  # 30 кадров в секунду
+        clock.tick(30)
         pygame.display.flip()
 
         running1 = True

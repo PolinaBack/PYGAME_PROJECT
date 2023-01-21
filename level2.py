@@ -5,12 +5,14 @@ import os
 import sys
 
 
+# Инициализация констант и pygame
 pygame.init()
 SIZE = WIDTH, HEIGHT = 800, 600
 SCREEN = pygame.display.set_mode(SIZE)
 text_showing = False
 
 
+# функция, скачивающая и изменяющая по надобности изображения
 def load_image(name, colorkey=None):
     fullname = os.path.join(name)
     if not os.path.isfile(fullname):
@@ -26,12 +28,15 @@ def load_image(name, colorkey=None):
         image = image.convert_alpha()
     return image
 
+
+# функция, отображающая сообщения и текст
 def message(size, mess, color, x_mess, y_mess):
     font = pygame.font.Font(None, size)
     text_t = font.render(mess, True, color)
     SCREEN.blit(text_t, (x_mess, y_mess))
 
 
+# класс машинок (красных или желтых)
 class Other_Cars(pygame.sprite.Sprite):
     im_random = random.choice(['materials/images/cool_car.png',
                                'materials/images/taxi.png'])
@@ -46,10 +51,13 @@ class Other_Cars(pygame.sprite.Sprite):
         self.score = 4
         self.count = 0
 
+    # функция по рандомному выбору машинок и их координат
     def driving_other_car(self, other):
         if self.rect.y < 620:
+            # изменение координат
             self.rect = self.rect.move(0, self.score)
             self.count += 1
+            # изменение скорости
             if self.count % 50 == 0:
                 self.score += 0.5
         else:
@@ -73,6 +81,7 @@ class Other_Cars(pygame.sprite.Sprite):
             other.rect.x = cx
 
 
+# класс Яндекс.Ровера
 class Yandex_Robo_Delivery(pygame.sprite.Sprite):
     image = pygame.transform.scale(load_image('materials/models/robo-deliver.png'), (100, 130))
 
@@ -82,6 +91,7 @@ class Yandex_Robo_Delivery(pygame.sprite.Sprite):
         self.rect = self.robo_delivery.get_rect().move(x, y)
         self.mask = pygame.mask.from_surface(self.robo_delivery)
 
+    # функция, отслеживающая столкновение с другими объектами
     def update(self):
         global reaction
         if pygame.sprite.collide_mask(self, other_car):
@@ -174,6 +184,8 @@ class Yandex_Robo_Delivery(pygame.sprite.Sprite):
             reaction = False
             time.sleep(1)
 
+
+# класс финиша
 class Finish(pygame.sprite.Sprite):
     image = pygame.transform.scale(load_image('materials/images/finish2.png'), (400, 50))
 
@@ -183,6 +195,7 @@ class Finish(pygame.sprite.Sprite):
         self.rect = self.finish.get_rect().move(x, y)
         self.mask = pygame.mask.from_surface(self.finish)
 
+    # функция по появлению финиша
     def moving(self, score, robot):
         global text_showing
         self.rect = self.rect.move(0, score)
@@ -202,6 +215,7 @@ class Comp_Menu(pygame.sprite.Sprite):
         self.width = self.cm.get_width()
         self.height = self.cm.get_height()
 
+
 class Fail_Menu(pygame.sprite.Sprite):
     image = load_image('materials/images/failed.png')
     image = pygame.transform.scale(image, (600, 500))
@@ -213,6 +227,7 @@ class Fail_Menu(pygame.sprite.Sprite):
         self.mask = pygame.mask.from_surface(self.cm)
         self.width = self.cm.get_width()
         self.height = self.cm.get_height()
+
 
 class Comp_Next(pygame.sprite.Sprite):
     image = load_image('materials/images/comp_next.png')
@@ -226,6 +241,7 @@ class Comp_Next(pygame.sprite.Sprite):
         self.width = self.cn.get_width()
         self.height = self.cn.get_height()
 
+
 class Comp_Back(pygame.sprite.Sprite):
     image = load_image('materials/images/comp_back.png')
     image = pygame.transform.scale(image, (150, 150))
@@ -237,6 +253,7 @@ class Comp_Back(pygame.sprite.Sprite):
         self.mask = pygame.mask.from_surface(self.cb)
         self.width = self.cb.get_width()
         self.height = self.cb.get_height()
+
 
 class Comp_Main(pygame.sprite.Sprite):
     image = load_image('materials/images/comp_menu.png')
@@ -250,6 +267,7 @@ class Comp_Main(pygame.sprite.Sprite):
         self.width = self.cm.get_width()
         self.height = self.cm.get_height()
 
+
 class Fail_Main(pygame.sprite.Sprite):
     image = load_image('materials/images/comp_menu.png')
     image = pygame.transform.scale(image, (245, 108))
@@ -261,6 +279,7 @@ class Fail_Main(pygame.sprite.Sprite):
         self.mask = pygame.mask.from_surface(self.cm)
         self.width = self.cm.get_width()
         self.height = self.cm.get_height()
+
 
 class Fail_Repeat(pygame.sprite.Sprite):
     image = load_image('materials/images/repeat.png')
@@ -274,6 +293,8 @@ class Fail_Repeat(pygame.sprite.Sprite):
         self.width = self.cm.get_width()
         self.height = self.cm.get_height()
 
+# параметры, необходимые для выполнения игры
+# параметры работающие в цикле
 reaction = True
 x_chages, y_chages = 0, 0
 x = 340
@@ -290,7 +311,7 @@ robot_delivery = Yandex_Robo_Delivery(x, y)
 other_car = Other_Cars()
 other_car2 = Other_Cars()
 running = True
-
+# основной цикл программы
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -300,16 +321,6 @@ while running:
                 x_chages -= block
             elif event.key == pygame.K_RIGHT and reaction:
                 x_chages += block
-            # elif event.key == pygame.K_UP and reaction:
-            #     if y_chages - block + robot_delivery.rect.y > 0:
-            #         y_chages -= block
-            #     else:
-            #         y_chages = 0
-            # elif event.key == pygame.K_DOWN and reaction:
-            #     if y_chages + block + robot_delivery.rect.y + 150 < HEIGHT:
-            #         y_chages += block
-            #     else:
-            #         y_chages = 0
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT \
                     or event.key == pygame.K_DOWN or event.key == pygame.K_UP:
@@ -317,7 +328,6 @@ while running:
                 y_chages = 0
 
     robot_delivery.rect.x += x_chages
-    # robot_delivery.rect.y += y_chages
     SCREEN.fill((125, 116, 109))
 
     SCREEN.blit(load_image('materials/images/good_background.png'), (0, 0))
