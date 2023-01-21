@@ -313,7 +313,7 @@ count = 0
 robot_delivery = Yandex_Robo_Delivery2(250, 345)
 stop = Error_end(10, 500)
 check = Check_order(630, 500)
-men = AnimatedSprite(load_image("materials/images/anima_men.png"), 2, 1, 490, 320)
+men = AnimatedSprite(pygame.transform.scale(load_image("materials/images/anima_men2.png"), (350, 250)), 2, 1, 490, 320)
 coffee_d = Coffee_c(160, 0)
 all_objects[coffee_d] = 'Кофе-----'
 fries_p = Fries_Potato(10, 0)
@@ -348,11 +348,11 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            # воспроизведение заказа
-            if men.rect.x < event.pos[0] < men.width + men.rect.x and \
-                    men.rect.y < event.pos[1] < men.height + men.rect.y:
-                men.update()
+        # if event.type == pygame.MOUSEBUTTONDOWN:
+        #     # воспроизведение заказа
+        #     if men.rect.x < event.pos[0] < men.width + men.rect.x and \
+        #             men.rect.y < event.pos[1] < men.height + men.rect.y:
+        #         men.update()
         for obg in all_objects:
             if event.type == pygame.MOUSEBUTTONDOWN:
                 # печать заказа слева
