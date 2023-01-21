@@ -382,4 +382,3 @@ while running:
     SCREEN.blit(text_t, (350, 10))
     pygame.display.flip()
 pygame.quit()
-
