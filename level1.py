@@ -348,11 +348,11 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-        # if event.type == pygame.MOUSEBUTTONDOWN:
-        #     # воспроизведение заказа
-        #     if men.rect.x < event.pos[0] < men.width + men.rect.x and \
-        #             men.rect.y < event.pos[1] < men.height + men.rect.y:
-        #         men.update()
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            # воспроизведение заказа
+            if men.rect.x < event.pos[0] < men.width + men.rect.x and \
+                    men.rect.y < event.pos[1] < men.height + men.rect.y:
+                men.update()
         for obg in all_objects:
             if event.type == pygame.MOUSEBUTTONDOWN:
                 # печать заказа слева
@@ -383,7 +383,7 @@ while running:
                                 if event1.type == pygame.MOUSEBUTTONDOWN:
                                     if menu_next.rect.x < event1.pos[0] < menu_next.width + menu_next.rect.x and \
                                             menu_next.rect.y < event1.pos[1] < menu_next.height + menu_next.rect.y:
-                                        exec(open("level2.py").read())
+                                        import level2
                                         running1 = False
                                     if menu_main.rect.x < event1.pos[0] < menu_main.width + menu_main.rect.x and \
                                             menu_main.rect.y < event1.pos[1] < menu_main.height + menu_main.rect.y:
